@@ -1,0 +1,131 @@
+version: '3.8'
+
+services:
+  # OpenAI Agent
+  openai-agent:
+    build:
+      context: ../..
+      dockerfile: Dockerfile.agent
+    ports:
+      - "8081:8080"
+    environment:
+      - AGENT_PROVIDER=openai
+      - AGENT_MODEL=gpt-3.5-turbo
+      - AGENT_SYSTEM_PROMPT=You are a helpful customer support agent. Be friendly and professional.
+      - AGENT_API_KEY=${OPENAI_API_KEY}
+      - PORT=8080
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Claude Agent
+  claude-agent:
+    build:
+      context: ../..
+      dockerfile: Dockerfile.agent  
+    ports:
+      - "8082:8080"
+    environment:
+      - AGENT_PROVIDER=claude
+      - AGENT_MODEL=claude-3-sonnet-20240229
+      - AGENT_SYSTEM_PROMPT=You are a code review assistant. Provide detailed, constructive feedback on code quality, security, and best practices.
+      - AGENT_API_KEY=${CLAUDE_API_KEY}
+      - PORT=8080
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    depends_on:
+      - openai-agent
+
+  # Gemini Agent  
+  gemini-agent:
+    build:
+      context: ../..
+      dockerfile: Dockerfile.agent
+    ports:
+      - "8083:8080"
+    environment:
+      - AGENT_PROVIDER=gemini
+      - AGENT_MODEL=gemini-pro
+      - AGENT_SYSTEM_PROMPT=You are a creative writing assistant. Help users with content creation, editing, and writing improvements.
+      - AGENT_API_KEY=${GEMINI_API_KEY}
+      - PORT=8080
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    depends_on:
+      - claude-agent
+
+  # Mock vLLM Server (for testing without actual vLLM)
+  mock-vllm:
+    build:
+      context: ../..
+      dockerfile: local-testing/docker/Dockerfile.mock-vllm
+    ports:
+      - "8084:8000"
+    environment:
+      - MODEL_NAME=llama2-7b-chat
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # vLLM Agent (connects to mock server)
+  vllm-agent:
+    build:
+      context: ../..
+      dockerfile: Dockerfile.agent
+    ports:
+      - "8085:8080"
+    environment:
+      - AGENT_PROVIDER=vllm
+      - AGENT_MODEL=llama2-7b-chat
+      - AGENT_ENDPOINT=http://mock-vllm:8000/v1
+      - AGENT_SYSTEM_PROMPT=You are an internal company assistant. Answer questions about company policies and procedures.
+      - AGENT_API_KEY=mock-api-key
+      - PORT=8080
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    depends_on:
+      - mock-vllm
+
+  # Test client (for automated testing)
+  test-client:
+    build:
+      context: ../..
+      dockerfile: Dockerfile.test-client
+    environment:
+      - OPENAI_AGENT_URL=http://openai-agent:8080
+      - CLAUDE_AGENT_URL=http://claude-agent:8080
+      - GEMINI_AGENT_URL=http://gemini-agent:8080
+      - VLLM_AGENT_URL=http://vllm-agent:8080
+    depends_on:
+      - openai-agent
+      - claude-agent
+      - gemini-agent
+      - vllm-agent
+    profiles:
+      - testing
+
+volumes:
+  agent_logs:
+    driver: local
+
+networks:
+  default:
+    name: kubeagentic-network

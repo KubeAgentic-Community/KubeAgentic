@@ -1,0 +1,58 @@
+apiVersion: ai.example.com/v1
+kind: Agent
+metadata:
+  name: internal-qa-agent
+  namespace: default
+spec:
+  provider: "vllm"
+  model: "llama2-7b-chat"
+  endpoint: "http://vllm-service.ml-inference.svc.cluster.local:8000/v1"
+  systemPrompt: |
+    You are an internal Q&A assistant for company employees.
+    You have access to company documentation and policies.
+    Provide accurate, helpful answers based on internal knowledge.
+    If you don't know something, be honest and direct users to appropriate resources.
+  apiSecretRef:
+    name: vllm-secret
+    key: api-key  # Often just a placeholder for self-hosted
+  replicas: 3
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "50m"
+    limits:
+      memory: "256Mi"
+      cpu: "100m"
+  serviceType: "LoadBalancer"  # Expose externally for employee access
+  tools:
+  - name: "policy_search"
+    description: "Search company policies and documentation"
+    inputSchema:
+      type: "object"
+      properties:
+        query:
+          type: "string"
+          description: "Search query for policies"
+      required: ["query"]
+  - name: "employee_directory"
+    description: "Look up employee contact information"
+    inputSchema:
+      type: "object"
+      properties:
+        name:
+          type: "string"
+          description: "Employee name to search for"
+      required: ["name"]
+---
+# Secret for vLLM (might be just a placeholder)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vllm-secret
+  namespace: default
+type: Opaque
+data:
+  # For self-hosted vLLM, this might be empty or a simple token
+  # echo -n "internal-api-token" | base64
+  api-key: "aW50ZXJuYWwtYXBpLXRva2Vu"
+

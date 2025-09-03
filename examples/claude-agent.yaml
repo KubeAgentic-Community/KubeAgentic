@@ -1,0 +1,54 @@
+apiVersion: ai.example.com/v1
+kind: Agent
+metadata:
+  name: code-review-agent
+  namespace: default
+spec:
+  provider: "claude"
+  model: "claude-3-sonnet-20240229"
+  systemPrompt: |
+    You are an expert code reviewer specializing in security, performance, and best practices.
+    Review code submissions and provide detailed feedback including:
+    - Security vulnerabilities
+    - Performance improvements
+    - Code style and maintainability
+    - Best practice recommendations
+    Always be constructive and educational in your feedback.
+  apiSecretRef:
+    name: claude-secret
+    key: api-key
+  replicas: 1
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "200m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+  serviceType: "ClusterIP"
+  tools:
+  - name: "static_analysis"
+    description: "Run static code analysis on submitted code"
+    inputSchema:
+      type: "object"
+      properties:
+        code:
+          type: "string"
+          description: "The code to analyze"
+        language:
+          type: "string"
+          description: "Programming language"
+      required: ["code", "language"]
+---
+# Secret containing Claude API key
+apiVersion: v1
+kind: Secret
+metadata:
+  name: claude-secret
+  namespace: default
+type: Opaque
+data:
+  # Replace with base64 encoded Claude API key
+  # echo -n "your-claude-api-key" | base64
+  api-key: "eW91ci1jbGF1ZGUtYXBpLWtleQ=="
+
