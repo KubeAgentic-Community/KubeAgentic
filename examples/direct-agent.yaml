@@ -1,0 +1,67 @@
+apiVersion: ai.example.com/v1
+kind: Agent
+metadata:
+  name: simple-chat-agent
+  namespace: default
+  labels:
+    framework: direct
+    use-case: simple-chat
+spec:
+  # Framework choice
+  framework: direct  # Simple, fast, direct API calls
+  
+  # Standard configuration
+  provider: openai
+  model: gpt-4
+  systemPrompt: "You are a helpful customer support agent. Be friendly and professional."
+  apiSecretRef:
+    name: openai-secret
+    key: api-key
+  
+  # Simple tools (executed directly)
+  tools:
+  - name: order_lookup
+    description: "Look up customer orders by order ID"
+    inputSchema:
+      type: object
+      properties:
+        order_id:
+          type: string
+          description: "The order ID to look up"
+      required: ["order_id"]
+  - name: refund_process
+    description: "Process customer refunds"
+    inputSchema:
+      type: object
+      properties:
+        order_id:
+          type: string
+          description: "Order ID for refund"
+        reason:
+          type: string
+          description: "Reason for refund"
+      required: ["order_id", "reason"]
+  
+  # Scaling configuration
+  replicas: 2
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "200m"
+  
+  serviceType: ClusterIP
+---
+# Secret containing OpenAI API key
+apiVersion: v1
+kind: Secret
+metadata:
+  name: openai-secret
+  namespace: default
+type: Opaque
+data:
+  # Replace with base64 encoded OpenAI API key
+  # echo -n "your-openai-api-key" | base64
+  api-key: "eW91ci1vcGVuYWktYXBpLWtleQ=="

@@ -12,6 +12,7 @@ KubeAgentic is a Kubernetes operator designed to simplify the deployment, manage
 - **🔒 Secure by Default**: Manage your API keys and other sensitive data using Kubernetes Secrets, ensuring they are stored securely.
 - **📊 Built-in Monitoring**: Get real-time insights into the health and performance of your agents with built-in health checks and status reporting.
 - **🛠️ Tool Integration**: Extend the capabilities of your agents by integrating them with custom tools and services.
+- **🔗 Framework Flexibility**: Choose between simple direct API calls or complex LangGraph workflows for advanced multi-step reasoning.
 
 ## 🚀 Getting Started
 
@@ -88,6 +89,61 @@ curl -X POST http://localhost:8080/chat \
 ```
 
 Congratulations! You have successfully deployed and interacted with your first AI agent using KubeAgentic.
+
+## 🔗 Framework Options
+
+KubeAgentic supports two execution frameworks to match your use case:
+
+### Direct Framework (Default)
+Perfect for simple, fast interactions:
+
+```yaml
+spec:
+  framework: direct  # Simple API calls
+  provider: openai
+  model: gpt-4
+  systemPrompt: "You are a helpful assistant."
+  tools:
+  - name: calculator
+    description: "Basic math operations"
+```
+
+- **✅ Best for**: Chat bots, simple Q&A, straightforward tool usage
+- **✅ Benefits**: Fast response times, minimal resource usage, easy debugging
+- **⚡ Performance**: ~100-500ms response times
+
+### LangGraph Framework
+Ideal for complex, multi-step workflows:
+
+```yaml
+spec:
+  framework: langgraph  # Advanced workflows
+  provider: openai
+  model: gpt-4
+  systemPrompt: "You are an advanced problem-solving agent."
+  langgraphConfig:
+    graphType: conditional
+    nodes:
+    - name: analyze_problem
+      type: llm
+      prompt: "Analyze: {user_input}"
+    - name: gather_data
+      type: tool
+      tool: data_lookup
+    - name: provide_solution
+      type: llm
+      prompt: "Solve based on: {data}"
+    edges:
+    - from: analyze_problem
+      to: gather_data
+    - from: gather_data
+      to: provide_solution
+    entrypoint: analyze_problem
+```
+
+- **✅ Best for**: Customer service workflows, research tasks, complex reasoning
+- **✅ Benefits**: Stateful conversations, multi-step logic, tool orchestration
+- **⚡ Performance**: ~1-5s response times (depending on workflow complexity)
 
 ## 🎯 Example Use Cases
 

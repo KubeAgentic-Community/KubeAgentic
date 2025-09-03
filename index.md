@@ -17,6 +17,7 @@ KubeAgentic is a powerful Kubernetes operator that simplifies the deployment, ma
 - **🔒 Secure by Default**: API keys managed with Kubernetes Secrets
 - **📊 Built-in Monitoring**: Real-time health checks and status reporting
 - **🛠️ Tool Integration**: Extend agents with custom tools and services
+- **🔗 Framework Choice**: Direct API calls or LangGraph workflows for complex reasoning
 
 ## 🚀 Quick Start
 

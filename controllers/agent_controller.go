@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -200,6 +201,27 @@ func (r *AgentReconciler) buildDeployment(agent *aiv1.Agent) *appsv1.Deployment 
 			Name:  "AGENT_ENDPOINT",
 			Value: agent.Spec.Endpoint,
 		})
+	}
+
+	// Add framework configuration
+	framework := "direct" // default
+	if agent.Spec.Framework != "" {
+		framework = agent.Spec.Framework
+	}
+	env = append(env, corev1.EnvVar{
+		Name:  "AGENT_FRAMEWORK",
+		Value: framework,
+	})
+
+	// Add LangGraph configuration if present
+	if agent.Spec.LanggraphConfig != nil && framework == "langgraph" {
+		configBytes, err := json.Marshal(agent.Spec.LanggraphConfig)
+		if err == nil {
+			env = append(env, corev1.EnvVar{
+				Name:  "AGENT_LANGGRAPH_CONFIG",
+				Value: string(configBytes),
+			})
+		}
 	}
 
 	// A simple way to pass tools to the agent. A more robust implementation might use a ConfigMap.

@@ -1,0 +1,203 @@
+apiVersion: ai.example.com/v1
+kind: Agent
+metadata:
+  name: workflow-support-agent
+  namespace: default
+  labels:
+    framework: langgraph
+    use-case: complex-workflow
+spec:
+  # Framework choice
+  framework: langgraph  # Complex workflows, state management
+  
+  # Standard configuration
+  provider: openai
+  model: gpt-4
+  systemPrompt: "You are an advanced customer service agent with access to multiple systems. Use the available tools systematically to resolve customer issues."
+  apiSecretRef:
+    name: openai-secret
+    key: api-key
+  
+  # LangGraph-specific configuration
+  langgraphConfig:
+    graphType: conditional
+    
+    # Define the state schema
+    state:
+      customer_id: {type: string}
+      order_id: {type: string}
+      issue_type: {type: string}
+      resolution_status: {type: string}
+      previous_actions: {type: array}
+    
+    # Define workflow nodes
+    nodes:
+    - name: classify_issue
+      type: llm
+      prompt: |
+        Classify the customer issue based on their message: {user_input}
+        
+        Determine:
+        1. What type of issue this is (account, billing, order, shipping, refund)
+        2. Extract any relevant IDs (customer ID, order ID)
+        3. Assess urgency level
+        
+        Set the issue_type in your response.
+      outputs: ["issue_type", "customer_id", "order_id"]
+      
+    - name: lookup_customer
+      type: tool
+      tool: customer_lookup
+      condition: "issue_type in ['account', 'billing', 'refund']"
+      inputs: ["customer_id"]
+      outputs: ["customer_data"]
+      
+    - name: lookup_order
+      type: tool  
+      tool: order_lookup
+      condition: "issue_type in ['order', 'shipping', 'refund']"
+      inputs: ["order_id"]
+      outputs: ["order_data"]
+      
+    - name: check_policy
+      type: tool
+      tool: policy_check
+      inputs: ["issue_type", "customer_data", "order_data"]
+      outputs: ["policy_decision"]
+      
+    - name: escalate_human
+      type: action
+      condition: "policy_decision == 'escalate'"
+      action: create_ticket
+      
+    - name: auto_resolve
+      type: llm
+      condition: "policy_decision == 'auto_resolve'"
+      prompt: |
+        Based on the customer issue and policy decision, provide a resolution:
+        
+        Customer Data: {customer_data}
+        Order Data: {order_data}  
+        Issue Type: {issue_type}
+        Policy Decision: {policy_decision}
+        
+        Provide a helpful response to the customer with next steps.
+      outputs: ["final_response"]
+      
+    - name: execute_refund
+      type: tool
+      tool: refund_processor
+      condition: "auto_resolve_action == 'refund'"
+      inputs: ["order_id", "refund_amount"]
+      outputs: ["refund_confirmation"]
+      
+    # Define workflow edges (flow between nodes)
+    edges:
+    - from: classify_issue
+      to: lookup_customer
+      condition: "issue_type in ['account', 'billing', 'refund']"
+      
+    - from: classify_issue  
+      to: lookup_order
+      condition: "issue_type in ['order', 'shipping', 'refund']"
+      
+    - from: lookup_customer
+      to: check_policy
+      
+    - from: lookup_order
+      to: check_policy
+      
+    - from: check_policy
+      to: escalate_human
+      condition: "policy_decision == 'escalate'"
+      
+    - from: check_policy
+      to: auto_resolve
+      condition: "policy_decision == 'auto_resolve'"
+      
+    - from: auto_resolve
+      to: execute_refund
+      condition: "auto_resolve_action == 'refund'"
+      
+    # Entry and exit points
+    entrypoint: classify_issue
+    endpoints: [escalate_human, auto_resolve, execute_refund]
+  
+  # Tools available to the workflow
+  tools:
+  - name: customer_lookup
+    description: "Look up customer information by ID or email"
+    inputSchema:
+      type: object
+      properties:
+        customer_id:
+          type: string
+          description: "Customer ID"
+        email:
+          type: string
+          format: email
+          description: "Customer email address"
+      
+  - name: order_lookup  
+    description: "Look up order details by order ID"
+    inputSchema:
+      type: object
+      properties:
+        order_id:
+          type: string
+          description: "Order ID to look up"
+          
+  - name: policy_check
+    description: "Check company policies for issue resolution"
+    inputSchema:
+      type: object
+      properties:
+        issue_type:
+          type: string
+          description: "Type of customer issue"
+        customer_tier:
+          type: string
+          description: "Customer loyalty tier"
+        order_value:
+          type: number
+          description: "Order value in dollars"
+          
+  - name: refund_processor
+    description: "Process customer refunds automatically"
+    inputSchema:
+      type: object
+      properties:
+        order_id:
+          type: string
+          description: "Order ID for refund"
+        amount:
+          type: number
+          description: "Refund amount"
+        reason:
+          type: string
+          description: "Refund reason"
+      required: ["order_id", "amount", "reason"]
+  
+  # Resource requirements (LangGraph needs more resources)
+  replicas: 1
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "200m"
+    limits:
+      memory: "1Gi" 
+      cpu: "500m"
+  
+  serviceType: ClusterIP
+---
+# Secret containing OpenAI API key
+apiVersion: v1
+kind: Secret
+metadata:
+  name: openai-secret
+  namespace: default
+type: Opaque
+data:
+  # Replace with base64 encoded OpenAI API key
+  # echo -n "your-openai-api-key" | base64
+  api-key: "eW91ci1vcGVuYWktYXBpLWtleQ=="
