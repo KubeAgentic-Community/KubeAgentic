@@ -53,6 +53,93 @@ spec:
               endpoint:
                 type: string
                 description: "Custom endpoint URL for self-hosted models (optional)"
+              framework:
+                type: string
+                enum:
+                - "direct"
+                - "langgraph"
+                default: "direct"
+                description: "Agent framework to use for execution"
+              langgraphConfig:
+                type: object
+                properties:
+                  graphType:
+                    type: string
+                    enum:
+                    - "sequential"
+                    - "parallel"
+                    - "conditional"
+                    - "hierarchical"
+                    description: "Type of LangGraph workflow"
+                  nodes:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                      - name
+                      - type
+                      properties:
+                        name:
+                          type: string
+                          description: "Node identifier"
+                        type:
+                          type: string
+                          enum:
+                          - "llm"
+                          - "tool"
+                          - "action"
+                          description: "Type of node"
+                        prompt:
+                          type: string
+                          description: "Prompt template for LLM nodes"
+                        tool:
+                          type: string
+                          description: "Tool name for tool nodes"
+                        action:
+                          type: string
+                          description: "Action to execute"
+                        condition:
+                          type: string
+                          description: "Condition for conditional execution"
+                        inputs:
+                          type: array
+                          items:
+                            type: string
+                          description: "Input fields from state"
+                        outputs:
+                          type: array
+                          items:
+                            type: string
+                          description: "Output fields to state"
+                    description: "Workflow nodes definition"
+                  edges:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        from:
+                          type: string
+                          description: "Source node name"
+                        to:
+                          type: string
+                          description: "Target node name"
+                        condition:
+                          type: string
+                          description: "Conditional edge logic"
+                    description: "Workflow edges definition"
+                  state:
+                    type: object
+                    description: "State schema for the workflow"
+                    x-kubernetes-preserve-unknown-fields: true
+                  entrypoint:
+                    type: string
+                    description: "Entry node for the workflow"
+                  endpoints:
+                    type: array
+                    items:
+                      type: string
+                    description: "Possible end nodes"
+                description: "LangGraph workflow configuration"
               tools:
                 type: array
                 items:

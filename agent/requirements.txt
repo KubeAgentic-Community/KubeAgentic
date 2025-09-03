@@ -8,3 +8,10 @@ httpx==0.25.2
 python-multipart==0.0.6
 python-json-logger==2.0.7
 
+# LangGraph dependencies
+langgraph==0.1.8
+langchain==0.2.6
+langchain-openai==0.1.8
+langchain-anthropic==0.1.8
+langchain-google-genai==1.0.6
+

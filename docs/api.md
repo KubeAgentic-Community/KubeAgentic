@@ -122,6 +122,43 @@ spec:
   endpoint: http://my-vllm-server:8000/v1
 ```
 
+#### framework
+
+Specifies which framework to use for agent execution.
+
+**Type**: `string`  
+**Required**: No  
+**Default**: `direct`  
+**Allowed Values**: `direct`, `langgraph`
+
+- **`direct`**: Simple, fast API calls directly to the LLM
+- **`langgraph`**: Complex, stateful workflows with multi-step reasoning
+
+```yaml
+spec:
+  framework: langgraph
+```
+
+#### langgraphConfig
+
+Configuration for LangGraph workflows. Only used when `framework` is set to `langgraph`.
+
+**Type**: `object`  
+**Required**: No (required when framework is `langgraph`)
+
+**Properties**:
+- `graphType` (string, required): Type of workflow (`sequential`, `parallel`, `conditional`, `hierarchical`)
+- `nodes` (array, required): Workflow nodes definition
+- `edges` (array, required): Workflow edges definition  
+- `state` (object, optional): State schema for the workflow
+- `entrypoint` (string, required): Entry node name
+- `endpoints` (array, optional): Possible end nodes
+
+```yaml
+spec:
+  endpoint: http://my-vllm-server:8000/v1
+```
+
 #### replicas
 
 Number of agent pod replicas to run.
@@ -265,38 +302,101 @@ Array of status conditions providing detailed state information.
 - `message` (string): Human-readable message
 - `lastTransitionTime` (string): When the condition last changed
 
-## Complete Example
+## Complete Examples
+
+### Direct Framework Example
 
 ```yaml
 apiVersion: ai.example.com/v1
 kind: Agent
 metadata:
-  name: customer-support
+  name: simple-support
   namespace: production
-  labels:
-    app: customer-service
-    environment: production
 spec:
+  # Framework choice
+  framework: direct
+  
   # Required fields
   provider: openai
   model: gpt-4
-  systemPrompt: |
-    You are a professional customer support agent for our e-commerce platform.
-    
-    Guidelines:
-    - Always be friendly and helpful
-    - Ask for order numbers when dealing with order issues
-    - Escalate to human agents for complex problems
-    - Maintain customer privacy and data security
-    
-    You have access to order lookup and inventory checking tools.
+  systemPrompt: "You are a helpful customer support agent."
   apiSecretRef:
-    name: openai-production-secret
+    name: openai-secret
     key: api-key
   
-  # Optional fields
-  replicas: 3
-  serviceType: LoadBalancer
+  # Simple tools
+  tools:
+  - name: order_lookup
+    description: Look up customer order information
+    inputSchema:
+      type: object
+      properties:
+        order_id: {type: string}
+      required: ["order_id"]
+  
+  replicas: 2
+  serviceType: ClusterIP
+```
+
+### LangGraph Workflow Example
+
+```yaml
+apiVersion: ai.example.com/v1
+kind: Agent
+metadata:
+  name: workflow-support
+  namespace: production
+spec:
+  # Framework choice
+  framework: langgraph
+  
+  # Required fields
+  provider: openai
+  model: gpt-4
+  systemPrompt: "You are an advanced customer service agent with systematic problem-solving capabilities."
+  apiSecretRef:
+    name: openai-secret
+    key: api-key
+  
+  # LangGraph workflow configuration
+  langgraphConfig:
+    graphType: conditional
+    nodes:
+    - name: classify_issue
+      type: llm
+      prompt: "Classify this customer issue: {user_input}"
+      outputs: ["issue_type"]
+    - name: lookup_order
+      type: tool
+      tool: order_lookup
+      condition: "issue_type == 'order'"
+      inputs: ["order_id"]
+      outputs: ["order_data"]
+    - name: resolve_issue
+      type: llm
+      prompt: "Resolve the issue based on: {order_data}"
+      outputs: ["resolution"]
+    edges:
+    - from: classify_issue
+      to: lookup_order
+      condition: "issue_type == 'order'"
+    - from: lookup_order
+      to: resolve_issue
+    entrypoint: classify_issue
+    endpoints: [resolve_issue]
+  
+  # Tools for workflow
+  tools:
+  - name: order_lookup
+    description: Look up order details
+    inputSchema:
+      type: object
+      properties:
+        order_id: {type: string}
+      required: ["order_id"]
+  
+  # Higher resources for workflow processing
+  replicas: 1
   resources:
     requests:
       cpu: "200m"
@@ -304,32 +404,6 @@ spec:
     limits:
       cpu: "500m"
       memory: "1Gi"
-  tools:
-  - name: order_lookup
-    description: Look up customer order information
-    inputSchema:
-      type: object
-      properties:
-        order_id:
-          type: string
-          description: The order ID to look up
-        customer_email:
-          type: string
-          format: email
-          description: Customer email for verification
-      required: ["order_id"]
-  - name: inventory_check
-    description: Check product inventory status
-    inputSchema:
-      type: object
-      properties:
-        product_id:
-          type: string
-          description: Product SKU or ID
-        store_location:
-          type: string
-          description: Store location code (optional)
-      required: ["product_id"]
 ```
 
 ## Validation Rules

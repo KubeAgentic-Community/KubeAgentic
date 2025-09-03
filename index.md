@@ -17,6 +17,7 @@ KubeAgentic is a powerful Kubernetes operator that simplifies the deployment, ma
 - **🔒 Secure by Default**: API keys managed with Kubernetes Secrets
 - **📊 Built-in Monitoring**: Real-time health checks and status reporting
 - **🛠️ Tool Integration**: Extend agents with custom tools and services
+- **🔗 Framework Choice**: Direct API calls or LangGraph workflows for complex reasoning
 
 ## 🚀 Quick Start
 
@@ -40,6 +41,11 @@ curl -X POST http://localhost:8080/chat \
 
 ## 📚 Documentation
 
+### Framework Guides
+- [⚡ Direct Framework](direct-framework) - Simple, fast API calls for basic interactions
+- [🔗 LangGraph Framework](langgraph-framework) - Complex workflows with multi-step reasoning
+
+### Reference Documentation
 - [📖 User Guide](docs/) - Complete documentation and tutorials
 - [🔧 API Reference](api-reference) - Detailed API specification
 - [💡 Examples](examples) - Real-world usage examples

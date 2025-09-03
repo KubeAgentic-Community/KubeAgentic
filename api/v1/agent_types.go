@@ -31,6 +31,18 @@ type AgentSpec struct {
 	// +optional
 	Endpoint string `json:"endpoint,omitempty"`
 
+	// Framework specifies which framework to use for agent execution.
+	// "direct" uses simple API calls, "langgraph" enables complex workflows.
+	// +kubebuilder:validation:Enum=direct;langgraph
+	// +kubebuilder:default=direct
+	// +optional
+	Framework string `json:"framework,omitempty"`
+
+	// LanggraphConfig contains configuration for LangGraph workflows.
+	// Only used when Framework is set to "langgraph".
+	// +optional
+	LanggraphConfig *LanggraphConfig `json:"langgraphConfig,omitempty"`
+
 	// Tools is a list of tools that the agent can use to perform actions.
 	// Each tool has a name, description, and an optional input schema.
 	// +optional
@@ -71,6 +83,68 @@ type Tool struct {
 	// This helps the agent to correctly format the input for the tool.
 	// +optional
 	InputSchema *runtime.RawExtension `json:"inputSchema,omitempty"`
+}
+
+// LanggraphConfig defines the configuration for LangGraph workflows
+type LanggraphConfig struct {
+	// GraphType specifies the type of LangGraph workflow
+	// +kubebuilder:validation:Enum=sequential;parallel;conditional;hierarchical
+	GraphType string `json:"graphType"`
+
+	// Nodes defines the workflow nodes
+	Nodes []WorkflowNode `json:"nodes"`
+
+	// Edges defines the workflow edges
+	Edges []WorkflowEdge `json:"edges"`
+
+	// State defines the state schema for the workflow
+	State *runtime.RawExtension `json:"state,omitempty"`
+
+	// Entrypoint specifies the entry node for the workflow
+	Entrypoint string `json:"entrypoint"`
+
+	// Endpoints specifies possible end nodes for the workflow
+	Endpoints []string `json:"endpoints,omitempty"`
+}
+
+// WorkflowNode defines a node in the LangGraph workflow
+type WorkflowNode struct {
+	// Name is the unique identifier for the node
+	Name string `json:"name"`
+
+	// Type specifies the type of node
+	// +kubebuilder:validation:Enum=llm;tool;action
+	Type string `json:"type"`
+
+	// Prompt is the template for LLM nodes
+	Prompt string `json:"prompt,omitempty"`
+
+	// Tool is the tool name for tool nodes
+	Tool string `json:"tool,omitempty"`
+
+	// Action is the action to execute for action nodes
+	Action string `json:"action,omitempty"`
+
+	// Condition is the conditional logic for conditional nodes
+	Condition string `json:"condition,omitempty"`
+
+	// Inputs are the input fields from state
+	Inputs []string `json:"inputs,omitempty"`
+
+	// Outputs are the output fields to state
+	Outputs []string `json:"outputs,omitempty"`
+}
+
+// WorkflowEdge defines an edge in the LangGraph workflow
+type WorkflowEdge struct {
+	// From is the source node name
+	From string `json:"from"`
+
+	// To is the target node name
+	To string `json:"to"`
+
+	// Condition is the conditional logic for the edge
+	Condition string `json:"condition,omitempty"`
 }
 
 // AgentConditionType represents the type of an Agent's condition.
