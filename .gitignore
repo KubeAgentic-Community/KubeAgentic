@@ -101,3 +101,6 @@ local-testing/**/__pycache__/
 *.bak
 *.backup
 
+# Project-specific files to exclude
+prompt1.txt
+
