@@ -1,0 +1,78 @@
+# KubeAgentic Website Configuration
+title: KubeAgentic
+description: Deploy and manage AI agents on Kubernetes with simple YAML configurations
+baseurl: ""
+url: "https://sudeshmu.github.io"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+
+# Plugin settings
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Navigation
+header_pages:
+  - index.md
+  - docs/index.md
+  - examples.md
+  - local-testing.md
+  - api-reference.md
+
+# Collections
+collections:
+  docs:
+    output: true
+    permalink: /:collection/:name/
+  examples:
+    output: true
+    permalink: /:collection/:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+  - scope:
+      path: ""
+      type: "docs"
+    values:
+      layout: "page"
+  - scope:
+      path: ""
+      type: "examples"
+    values:
+      layout: "page"
+
+# GitHub Pages settings
+repository: sudeshmu/kubeagentic
+github:
+  repository_url: https://github.com/sudeshmu/kubeagentic
+
+# Social links
+github_username: sudeshmu
+
+# Exclude from processing
+exclude:
+  - vendor/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - package.json
+  - package-lock.json
+  - webpack.config.js
+  - "*.go"
+  - go.mod
+  - go.sum
+  - Dockerfile*
+  - Makefile
+  - .git/
+  - .gitignore
+  - bin/
+  - scripts/
