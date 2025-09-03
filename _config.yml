@@ -18,10 +18,11 @@ plugins:
 # Navigation
 header_pages:
   - index.md
-  - docs/index.md
+  - direct-framework.md
+  - langgraph-framework.md
+  - api-reference.md
   - examples.md
   - local-testing.md
-  - api-reference.md
 
 # Collections
 collections:
