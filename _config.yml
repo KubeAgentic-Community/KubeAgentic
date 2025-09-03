@@ -1,7 +1,7 @@
 # KubeAgentic Website Configuration
 title: KubeAgentic
 description: Deploy and manage AI agents on Kubernetes with simple YAML configurations
-baseurl: ""
+baseurl: "/KubeAgentic"
 url: "https://sudeshmu.github.io"
 
 # Build settings
@@ -51,9 +51,9 @@ defaults:
       layout: "page"
 
 # GitHub Pages settings
-repository: sudeshmu/kubeagentic
+repository: sudeshmu/KubeAgentic
 github:
-  repository_url: https://github.com/sudeshmu/kubeagentic
+  repository_url: https://github.com/sudeshmu/KubeAgentic
 
 # Social links
 github_username: sudeshmu

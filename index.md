@@ -41,9 +41,9 @@ curl -X POST http://localhost:8080/chat \
 ## 📚 Documentation
 
 - [📖 User Guide](docs/) - Complete documentation and tutorials
-- [🔧 API Reference](api-reference.html) - Detailed API specification
-- [💡 Examples](examples.html) - Real-world usage examples
-- [🧪 Local Testing](local-testing.html) - Development and testing guide
+- [🔧 API Reference](api-reference) - Detailed API specification
+- [💡 Examples](examples) - Real-world usage examples
+- [🧪 Local Testing](local-testing) - Development and testing guide
 
 ## 🎯 Use Cases
 
@@ -54,10 +54,10 @@ curl -X POST http://localhost:8080/chat \
 
 ## 🤝 Community
 
-- [GitHub Repository](https://github.com/sudeshmu/kubeagentic)
-- [Issues & Bug Reports](https://github.com/sudeshmu/kubeagentic/issues)
-- [Discussions](https://github.com/sudeshmu/kubeagentic/discussions)
+- [GitHub Repository](https://github.com/sudeshmu/KubeAgentic)
+- [Issues & Bug Reports](https://github.com/sudeshmu/KubeAgentic/issues)
+- [Discussions](https://github.com/sudeshmu/KubeAgentic/discussions)
 
 ## 📄 License
 
-Licensed under the Apache License 2.0. See [LICENSE](https://github.com/sudeshmu/kubeagentic/blob/main/LICENSE) for details.
+Licensed under the Apache License 2.0. See [LICENSE](https://github.com/sudeshmu/KubeAgentic/blob/main/LICENSE) for details.
