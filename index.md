@@ -96,7 +96,7 @@ body { margin: 0; padding: 0; }
 <!-- Hero Section -->
 <div class="hero-section">
   <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
-    <img src="/assets/logo.jpg" alt="KubeAgentic Logo - AI agents on Kubernetes" style="max-width: 200px; height: auto; margin-bottom: 2rem;">
+    <img src="/assets/logo.png" alt="KubeAgentic Logo - AI agents on Kubernetes" style="max-width: 300px; height: auto; margin-bottom: 2rem;">
     <h1 style="font-size: 4rem; font-weight: 700; margin-bottom: 1rem; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
       Deploy AI Agents on Kubernetes
     </h1>
