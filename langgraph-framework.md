@@ -1,9 +1,8 @@
 ---
-layout: default
+layout: page
 title: LangGraph Framework Guide
-nav_order: 5
+description: Complex workflows with multi-step reasoning and stateful conversations
 ---
-
 # LangGraph Framework Guide
 
 The **LangGraph Framework** enables complex, stateful workflows for AI agents that require multi-step reasoning, conditional logic, and sophisticated tool orchestration. It's built on LangChain's LangGraph library for creating sophisticated agent workflows.

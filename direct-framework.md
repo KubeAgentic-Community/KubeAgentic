@@ -1,10 +1,8 @@
 ---
-layout: default
+layout: page
 title: Direct Framework Guide
-nav_order: 4
+description: Simple, fast API calls for basic AI agent interactions
 ---
-
-# Direct Framework Guide
 
 The **Direct Framework** is KubeAgentic's default execution mode, designed for fast, straightforward interactions with AI agents. It provides simple API calls directly to the LLM provider without complex workflow orchestration.
 
@@ -29,160 +27,116 @@ The **Direct Framework** is KubeAgentic's default execution mode, designed for f
 
 - **Response Time**: ~100-500ms
 - **Resource Usage**: Low CPU and memory footprint
-- **Concurrency**: High - supports many simultaneous requests
 - **Scalability**: Excellent horizontal scaling
-- **Debugging**: Simple request/response flow
+- **Complexity**: Minimal configuration required
 
-## Quick Example
+## Configuration Example
+
+Here's a basic Direct Framework agent configuration:
 
 ```yaml
 apiVersion: ai.example.com/v1
 kind: Agent
 metadata:
-  name: support-chatbot
-  namespace: customer-service
+  name: simple-chatbot
 spec:
-  framework: direct        # Simple, fast interactions
+  framework: direct
   provider: openai
   model: gpt-4
-  systemPrompt: "You are a helpful customer support agent."
+  systemPrompt: "You are a helpful customer service assistant."
   apiSecretRef:
     name: openai-secret
     key: api-key
-  
-  tools:
-  - name: order_lookup
-    description: Look up customer order information
-    inputSchema:
-      type: object
-      properties:
-        order_id: {type: string}
-      required: ["order_id"]
-  
-  replicas: 3
+  replicas: 2
   resources:
     requests:
-      cpu: 100m
-      memory: 256Mi
+      memory: "128Mi"
+      cpu: "100m"
     limits:
-      cpu: 200m
-      memory: 512Mi
+      memory: "256Mi"
+      cpu: "200m"
 ```
 
-## Common Use Cases
+## Key Features
 
-### 1. Customer Support Bot
-- Handle FAQs and basic inquiries
-- Look up order status and customer information
-- Escalate complex issues to humans
-- Provide quick, accurate responses
+### Simple Configuration
+The Direct Framework requires minimal configuration. Just specify your provider, model, and system prompt.
 
-### 2. Code Review Assistant
-- Analyze code for best practices
-- Suggest improvements and optimizations
-- Check for security vulnerabilities
-- Provide educational feedback
+### Fast Response Times
+Direct API calls to LLM providers ensure the fastest possible response times for your applications.
 
-### 3. Content Generator
-- Create marketing copy and social media posts
-- Generate product descriptions
-- Write blog post outlines
-- Adapt content for different channels
+### Resource Efficient
+Minimal overhead means your agents use fewer resources, allowing for better cost optimization.
 
-### 4. Data Analysis Helper
-- Interpret charts and business metrics
-- Explain trends and patterns
-- Provide data-driven recommendations
-- Create visualization descriptions
+### Easy Debugging
+Simple request-response patterns make it easy to debug and monitor your agents.
 
-### 5. Educational Tutor
-- Answer student questions
-- Generate practice problems
-- Provide step-by-step explanations
-- Adapt to different learning levels
+## Tool Integration
 
-## Configuration Best Practices
-
-### Resource Allocation
-
-**Light workloads** (simple chat):
-```yaml
-resources:
-  requests:
-    cpu: 100m
-    memory: 256Mi
-  limits:
-    cpu: 200m
-    memory: 512Mi
-```
-
-**Medium workloads** (with tools):
-```yaml
-resources:
-  requests:
-    cpu: 200m
-    memory: 512Mi
-  limits:
-    cpu: 500m
-    memory: 1Gi
-```
-
-### Scaling for High Throughput
+Even with the Direct Framework, you can still integrate tools:
 
 ```yaml
-replicas: 5
-resources:
-  requests:
-    cpu: 100m    # Lower per-replica usage
-    memory: 256Mi
-serviceType: LoadBalancer  # External access
+spec:
+  framework: direct
+  provider: openai
+  model: gpt-4
+  tools:
+  - name: calculator
+    description: "Basic math operations"
+    endpoint: "http://calculator-service:8080/calculate"
+  - name: weather
+    description: "Get current weather information"
+    endpoint: "http://weather-service:8080/weather"
 ```
 
-### Tool Design Tips
+## Monitoring and Observability
 
-1. **Keep tools focused**: Single, clear purpose per tool
-2. **Validate inputs**: Use proper JSON schema validation
-3. **Provide good descriptions**: Help the AI understand when to use each tool
-4. **Handle errors gracefully**: Return meaningful error messages
-5. **Optimize for speed**: Direct framework excels with fast tool responses
+The Direct Framework provides built-in monitoring capabilities:
 
-## Monitoring and Troubleshooting
+- **Health Checks**: Automatic health monitoring
+- **Metrics**: Request/response metrics via Prometheus
+- **Logging**: Structured logging for debugging
+- **Tracing**: Request tracing for performance analysis
 
-**Essential metrics:**
-- Response latency (target: <500ms)
-- Request throughput
-- Error rates
-- Resource utilization
-- Tool usage patterns
+## Best Practices
 
-**Common issues:**
-- **High latency** → Check tool performance, consider caching
-- **High error rates** → Validate tool schemas and API connections
-- **Resource pressure** → Adjust limits or increase replicas
-- **Poor responses** → Review system prompts and tool descriptions
+1. **Keep it Simple**: Use Direct Framework for straightforward use cases
+2. **Optimize Prompts**: Well-crafted system prompts improve response quality
+3. **Monitor Performance**: Track response times and resource usage
+4. **Scale Horizontally**: Add more replicas for high-throughput scenarios
+5. **Use Appropriate Models**: Choose models based on your performance and cost requirements
 
-## When to Consider LangGraph
+## Migration from Other Frameworks
 
-Consider upgrading to [LangGraph Framework](langgraph-framework) when you need:
-- Multi-step conditional logic
-- State persistence across interactions
-- Complex tool orchestration
-- Decision trees and branching workflows
-- Advanced reasoning capabilities
+If you're currently using a more complex framework and want to simplify:
 
-## Complete Examples
+1. **Evaluate Complexity**: Determine if you really need complex workflows
+2. **Simplify Logic**: Move complex logic to your application layer
+3. **Test Performance**: Ensure Direct Framework meets your performance needs
+4. **Update Configuration**: Modify your agent specs to use `framework: direct`
 
-Visit our [examples directory](https://github.com/sudeshmu/KubeAgentic/tree/main/examples) for full configuration files:
+## Troubleshooting
 
-- [`direct-agent.yaml`](https://github.com/sudeshmu/KubeAgentic/blob/main/examples/direct-agent.yaml) - Simple customer support agent
-- [`claude-agent.yaml`](https://github.com/sudeshmu/KubeAgentic/blob/main/examples/claude-agent.yaml) - Code review assistant
-- [`openai-agent.yaml`](https://github.com/sudeshmu/KubeAgentic/blob/main/examples/openai-agent.yaml) - General purpose agent
+### Common Issues
+
+**Slow Response Times**
+- Check your network connectivity to the LLM provider
+- Verify your API key has sufficient quota
+- Consider using a faster model or region
+
+**High Resource Usage**
+- Review your resource limits and requests
+- Check for memory leaks in your application
+- Monitor CPU usage patterns
+
+**Tool Integration Issues**
+- Verify tool endpoints are accessible
+- Check tool response formats
+- Ensure proper error handling
 
 ## Next Steps
 
-- [View API Reference](api-reference) for complete configuration options
-- [Try Local Testing](local-testing) to experiment with different configurations  
-- [Compare with LangGraph](langgraph-framework) for complex workflows
-- [Check out Examples](examples) for more use cases
-
-The Direct Framework provides the perfect balance of simplicity, speed, and reliability for most AI agent use cases.
+- [View Examples](examples) - See real-world Direct Framework implementations
+- [API Reference](api-reference) - Detailed configuration options
+- [LangGraph Framework](langgraph-framework) - For complex workflows
+- [Local Testing](local-testing) - Test your agents locally

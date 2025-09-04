@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Examples
-permalink: /examples/
+description: Real-world examples and templates for deploying AI agents with KubeAgenticpermalink: /examples/
 ---
 
 # KubeAgentic Examples

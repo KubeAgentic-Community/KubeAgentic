@@ -1,7 +1,7 @@
 ---
 layout: page
 title: API Reference
-permalink: /api-reference/
+description: Complete API specification for Agent Custom Resources and componentspermalink: /api-reference/
 ---
 
 # KubeAgentic API Reference

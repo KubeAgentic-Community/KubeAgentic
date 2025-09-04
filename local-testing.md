@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Local Testing
-permalink: /local-testing/
+description: Comprehensive guide for testing KubeAgentic locally and in development environmentspermalink: /local-testing/
 ---
 
 # KubeAgentic Local Testing Guide
