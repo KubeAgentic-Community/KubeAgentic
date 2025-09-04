@@ -8,6 +8,19 @@ KubeAgentic is a Kubernetes operator designed to simplify the deployment, manage
 
 - **🤖 Multi-Provider Support**: Seamlessly switch between different AI providers, including OpenAI, Anthropic (Claude), Google (Gemini), and self-hosted vLLM models.
 - **📝 Declarative Configuration**: Define your agents using standard Kubernetes Custom Resources (CRDs), making it easy to integrate with your existing GitOps workflows.
+
+## 📖 Documentation
+
+The complete documentation and website are available at [https://kubeagentic.com](https://kubeagentic.com).
+
+The website source code is organized in the `website/` folder and includes:
+- **Homepage**: Overview and quick start guide
+- **Direct Framework Guide**: Simple, fast API calls for basic interactions
+- **LangGraph Framework Guide**: Complex workflows with multi-step reasoning
+- **API Reference**: Complete API specification
+- **Examples**: Real-world usage examples and templates
+- **Local Testing**: Development and testing guide
+
 - **🔄 Autoscaling**: Automatically scale your agents up or down based on demand, ensuring optimal resource utilization.
 - **🔒 Secure by Default**: Manage your API keys and other sensitive data using Kubernetes Secrets, ensuring they are stored securely.
 - **📊 Built-in Monitoring**: Get real-time insights into the health and performance of your agents with built-in health checks and status reporting.
