@@ -1,8 +1,18 @@
 # KubeAgentic Website Configuration
 title: KubeAgentic
-description: Deploy and manage AI agents on Kubernetes with simple YAML configurations
+description: Deploy and manage AI agents on Kubernetes with simple YAML configurations. The simplest way to deploy, manage, and scale AI agents in your Kubernetes cluster with declarative YAML configurations.
 baseurl: ""
 url: "https://kubeagentic.com"
+
+# SEO and Social
+author: KubeAgentic Team
+email: contact@kubeagentic.com
+twitter:
+  username: kubeagentic
+  card: summary_large_image
+github:
+  username: sudeshmu
+  repository_url: https://github.com/sudeshmu/KubeAgentic
 
 # Build settings
 markdown: kramdown
@@ -14,6 +24,17 @@ plugins:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-seo-tag
+
+# SEO Tag settings
+seo:
+  type: "WebSite"
+  name: "KubeAgentic"
+  description: "Deploy and manage AI agents on Kubernetes with simple YAML configurations"
+  url: "https://kubeagentic.com"
+  image: "https://kubeagentic.com/assets/logo.jpg"
+  twitter:
+    card: "summary_large_image"
+    site: "@kubeagentic"
 
 # Navigation
 header_pages:
@@ -53,8 +74,6 @@ defaults:
 
 # GitHub Pages settings
 repository: sudeshmu/KubeAgentic
-github:
-  repository_url: https://github.com/sudeshmu/KubeAgentic
 
 # Social links
 github_username: sudeshmu
