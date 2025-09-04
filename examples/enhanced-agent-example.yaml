@@ -1,0 +1,238 @@
+# Enhanced KubeAgentic Agent Example
+# This example demonstrates all the advanced features of the KubeAgentic operator
+---
+# First, create a secret with your API key
+apiVersion: v1
+kind: Secret
+metadata:
+  name: openai-secret
+  namespace: default
+type: Opaque
+stringData:
+  api-key: "your-openai-api-key-here"
+---
+# Example 1: Simple Direct Framework Agent
+apiVersion: ai.example.com/v1
+kind: Agent
+metadata:
+  name: simple-chatbot
+  namespace: default
+  labels:
+    app.kubernetes.io/name: kubeagentic
+    app.kubernetes.io/instance: simple-chatbot
+spec:
+  provider: openai
+  model: gpt-4
+  systemPrompt: |
+    You are a helpful AI assistant. You provide clear, concise, and accurate responses.
+    Always be polite and professional in your interactions.
+  apiSecretRef:
+    name: openai-secret
+    key: api-key
+  framework: direct
+  replicas: 2
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "200m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+  serviceType: LoadBalancer
+---
+# Example 2: Advanced LangGraph Workflow Agent
+apiVersion: ai.example.com/v1
+kind: Agent
+metadata:
+  name: research-assistant
+  namespace: default
+  labels:
+    app.kubernetes.io/name: kubeagentic
+    app.kubernetes.io/instance: research-assistant
+spec:
+  provider: claude
+  model: claude-3-sonnet-20240229
+  systemPrompt: |
+    You are a research assistant that helps users find and analyze information.
+    You can search the web, analyze documents, and provide comprehensive reports.
+  apiSecretRef:
+    name: claude-secret
+    key: api-key
+  framework: langgraph
+  langgraphConfig:
+    graphType: sequential
+    entrypoint: "start"
+    endpoints: ["end"]
+    nodes:
+    - name: "start"
+      type: "llm"
+      prompt: "Analyze the user's request and determine what information is needed."
+      inputs: ["user_input"]
+      outputs: ["analysis"]
+    - name: "search"
+      type: "tool"
+      tool: "web_search"
+      inputs: ["analysis"]
+      outputs: ["search_results"]
+    - name: "synthesize"
+      type: "llm"
+      prompt: "Synthesize the search results into a comprehensive response."
+      inputs: ["search_results"]
+      outputs: ["final_response"]
+    - name: "end"
+      type: "action"
+      action: "return_response"
+      inputs: ["final_response"]
+    edges:
+    - from: "start"
+      to: "search"
+    - from: "search"
+      to: "synthesize"
+    - from: "synthesize"
+      to: "end"
+    state:
+      type: "object"
+      properties:
+        user_input:
+          type: "string"
+        analysis:
+          type: "string"
+        search_results:
+          type: "array"
+        final_response:
+          type: "string"
+  tools:
+  - name: "web_search"
+    description: "Search the web for information on a given topic"
+    inputSchema:
+      type: "object"
+      properties:
+        query:
+          type: "string"
+          description: "The search query"
+        max_results:
+          type: "integer"
+          description: "Maximum number of results to return"
+          default: 10
+      required: ["query"]
+  - name: "document_analyzer"
+    description: "Analyze a document and extract key information"
+    inputSchema:
+      type: "object"
+      properties:
+        document_url:
+          type: "string"
+          description: "URL of the document to analyze"
+        analysis_type:
+          type: "string"
+          enum: ["summary", "key_points", "sentiment", "full_analysis"]
+          description: "Type of analysis to perform"
+      required: ["document_url", "analysis_type"]
+  replicas: 3
+  resources:
+    requests:
+      memory: "1Gi"
+      cpu: "500m"
+    limits:
+      memory: "2Gi"
+      cpu: "1000m"
+  serviceType: ClusterIP
+---
+# Example 3: Self-hosted vLLM Agent
+apiVersion: ai.example.com/v1
+kind: Agent
+metadata:
+  name: local-llm-agent
+  namespace: default
+  labels:
+    app.kubernetes.io/name: kubeagentic
+    app.kubernetes.io/instance: local-llm-agent
+spec:
+  provider: vllm
+  model: llama-2-7b-chat
+  systemPrompt: |
+    You are a local AI assistant running on a self-hosted vLLM server.
+    You provide fast and efficient responses using local compute resources.
+  apiSecretRef:
+    name: vllm-secret
+    key: api-key
+  endpoint: "http://vllm-server:8000/v1"
+  framework: direct
+  replicas: 1
+  resources:
+    requests:
+      memory: "2Gi"
+      cpu: "1000m"
+    limits:
+      memory: "4Gi"
+      cpu: "2000m"
+  serviceType: NodePort
+---
+# Example 4: Multi-provider Agent with Tools
+apiVersion: ai.example.com/v1
+kind: Agent
+metadata:
+  name: multi-tool-agent
+  namespace: default
+  labels:
+    app.kubernetes.io/name: kubeagentic
+    app.kubernetes.io/instance: multi-tool-agent
+spec:
+  provider: gemini
+  model: gemini-pro
+  systemPrompt: |
+    You are a versatile AI assistant with access to multiple tools.
+    You can help with calculations, weather, news, and more.
+  apiSecretRef:
+    name: gemini-secret
+    key: api-key
+  framework: direct
+  tools:
+  - name: "calculator"
+    description: "Perform mathematical calculations"
+    inputSchema:
+      type: "object"
+      properties:
+        expression:
+          type: "string"
+          description: "Mathematical expression to evaluate"
+      required: ["expression"]
+  - name: "weather"
+    description: "Get current weather information"
+    inputSchema:
+      type: "object"
+      properties:
+        location:
+          type: "string"
+          description: "City or location name"
+        units:
+          type: "string"
+          enum: ["celsius", "fahrenheit"]
+          description: "Temperature units"
+          default: "celsius"
+      required: ["location"]
+  - name: "news"
+    description: "Get latest news headlines"
+    inputSchema:
+      type: "object"
+      properties:
+        category:
+          type: "string"
+          enum: ["general", "technology", "business", "sports", "entertainment"]
+          description: "News category"
+          default: "general"
+        count:
+          type: "integer"
+          description: "Number of headlines to return"
+          default: 5
+          minimum: 1
+          maximum: 20
+  replicas: 2
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "200m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+  serviceType: LoadBalancer
