@@ -3,6 +3,11 @@ layout: home
 title: Home
 ---
 
+<div align="center">
+  <!-- Placeholder logo - replace with final design -->
+  <img src="{{ '/assets/kubeagentic-logo.svg' | relative_url }}" alt="KubeAgentic Logo" width="300" style="margin: 20px 0;"/>
+</div>
+
 # KubeAgentic 🤖
 
 **Deploy and manage AI agents on Kubernetes with simple YAML configurations.**
