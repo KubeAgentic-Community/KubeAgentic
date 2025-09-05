@@ -1,8 +1,22 @@
-# KubeAgentic
+<div align="center">
+  <!-- Placeholder logo - replace with final design -->
+  <img src="assets/kubeagentic-logo.svg" alt="KubeAgentic Logo" width="400" style="margin: 20px 0;"/>
+  
+  <h1>KubeAgentic</h1>
+  
+  <p><strong>Deploy and manage AI agents on Kubernetes with simple YAML configurations.</strong></p>
+  
+  <p align="center">
+    <a href="https://kubeagentic.com"><img src="https://img.shields.io/badge/Website-kubeagentic.com-blue?style=for-the-badge" alt="Website"></a>
+    <a href="https://github.com/sudeshmu/KubeAgentic/releases"><img src="https://img.shields.io/github/v/release/sudeshmu/KubeAgentic?style=for-the-badge" alt="Release"></a>
+    <a href="https://github.com/sudeshmu/KubeAgentic/blob/main/LICENSE"><img src="https://img.shields.io/github/license/sudeshmu/KubeAgentic?style=for-the-badge" alt="License"></a>
+    <a href="https://github.com/sudeshmu/KubeAgentic/stargazers"><img src="https://img.shields.io/github/stars/sudeshmu/KubeAgentic?style=for-the-badge" alt="Stars"></a>
+  </p>
+</div>
 
-**Deploy and manage AI agents on Kubernetes with simple YAML configurations.**
+---
 
-KubeAgentic is a Kubernetes operator designed to simplify the deployment, management, and scaling of AI agents in your cluster. By defining your agent's configuration in a simple YAML file, you can leverage the power of Kubernetes to automate the entire lifecycle of your AI agents.
+KubeAgentic is a powerful Kubernetes operator that simplifies the deployment, management, and scaling of AI agents in your cluster. By defining your agent's configuration in a simple YAML file, you can leverage the power of Kubernetes to automate the entire lifecycle of your AI agents.
 
 ## ✨ Features
 
