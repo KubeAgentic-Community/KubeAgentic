@@ -4,11 +4,14 @@ This directory contains visual assets for the KubeAgentic project.
 
 ## Logo Files
 
-### Required Logo Files:
-- `kubeagentic-logo.png` - Main logo (400px width recommended for README)
-- `kubeagentic-logo.svg` - Vector version for scaling
+### Current Logo Files:
+- `logo.png` - Main logo (1600×896, used in README and website)
+- `logo.jpg` - JPEG version of main logo (1600×896, compressed)
+- `favicon.ico` - Website favicon (needs proper sizing for browser use)
+
+### Recommended Additional Files:
 - `kubeagentic-icon.png` - Icon only version (square format)
-- `kubeagentic-favicon.ico` - Favicon for website
+- `kubeagentic-favicon.ico` - Properly sized favicon (16×16, 32×32)
 
 ### Logo Specifications:
 - **Format**: PNG (for bitmap) and SVG (for vector)
@@ -35,15 +38,18 @@ The logo should be:
 - Presentation materials
 
 ## Current Status:
-✅ **Placeholder Logo Available**: `kubeagentic-logo.svg` - Simple placeholder design
-🔄 **Professional Logo Needed** - Replace placeholder with final professional design
+✅ **Main Logo Available**: `logo.png` - Professional design (1600×896)
+✅ **Multiple Formats**: PNG and JPEG versions available
+🔄 **Optimization Needed** - Create proper favicon and icon versions
 
 ### Current Files:
-- `kubeagentic-logo.svg` - Placeholder SVG logo (currently used in README and website)
+- `logo.png` - Main PNG logo (234K, 1600×896, currently used in README and website)
+- `logo.jpg` - JPEG version (48K, 1600×896, compressed alternative)
+- `favicon.ico` - Current favicon (needs resizing for proper browser use)
 - `README.md` - This documentation file
 
-### To Replace Placeholder:
-1. Create professional logo following the design brief above
-2. Save as `kubeagentic-logo.svg` and `kubeagentic-logo.png` 
-3. Add additional formats (icon, favicon) as needed
-4. Update this README with final logo specifications
+### Recommended Improvements:
+1. Create properly sized favicon (16×16, 32×32) in ICO format
+2. Generate square icon version for social media and app usage
+3. Consider creating SVG version for perfect scaling
+4. Optimize file sizes if needed for web performance

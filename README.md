@@ -1,6 +1,5 @@
 <div align="center">
-  <!-- Placeholder logo - replace with final design -->
-  <img src="assets/kubeagentic-logo.svg" alt="KubeAgentic Logo" width="400" style="margin: 20px 0;"/>
+  <img src="assets/logo.png" alt="KubeAgentic Logo" width="400" style="margin: 20px 0;"/>
   
   <h1>KubeAgentic</h1>
   
