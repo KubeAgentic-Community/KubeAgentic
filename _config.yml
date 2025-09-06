@@ -1,6 +1,6 @@
 # KubeAgentic Website Configuration
 title: KubeAgentic
-description: Deploy and manage AI agents on Kubernetes with simple YAML configurations. The simplest way to deploy, manage, and scale AI agents in your Kubernetes cluster with declarative YAML configurations.
+description: Deploy and manage AI agents on Kubernetes with simple YAML configurations
 baseurl: ""
 url: "https://kubeagentic.com"
 
