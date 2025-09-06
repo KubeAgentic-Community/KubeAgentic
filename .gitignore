@@ -104,3 +104,8 @@ local-testing/**/__pycache__/
 # Project-specific files to exclude
 prompt1.txt
 
+
+# IDE and development files
+.claude/
+input.prompt
+projectContext.prompt

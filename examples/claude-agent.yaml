@@ -3,7 +3,14 @@ kind: Agent
 metadata:
   name: code-review-agent
   namespace: default
+  labels:
+    framework: direct
+    use-case: code-review
 spec:
+  # Framework choice  
+  framework: direct  # Simple, fast, direct API calls
+  
+  # Standard configuration
   provider: "claude"
   model: "claude-3-sonnet-20240229"
   systemPrompt: |
@@ -17,6 +24,7 @@ spec:
   apiSecretRef:
     name: claude-secret
     key: api-key
+  # Scaling configuration
   replicas: 1
   resources:
     requests:
@@ -25,6 +33,7 @@ spec:
     limits:
       memory: "1Gi"
       cpu: "500m"
+  
   serviceType: "ClusterIP"
   tools:
   - name: "static_analysis"
