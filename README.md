@@ -334,3 +334,28 @@ We welcome contributions from the community! If you'd like to contribute, please
 ## 📄 License
 
 KubeAgentic is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for more details.
+
+## 🧪 Quick Test - Simplified Operator
+
+For quick testing and development, we provide a simplified operator with both Direct and Tool Calling workflows:
+
+### Quick Deploy & Test
+
+```bash
+# 1. Deploy simplified operator
+kubectl apply -f deploy/simple-operator.yaml
+
+# 2. Run automated tests
+./test-operator.sh
+
+# 3. Test specific workflows
+kubectl apply -f examples/test-direct-agent.yaml      # Direct workflow
+kubectl apply -f examples/test-tool-calling-agent.yaml # Tool calling workflow
+```
+
+### Test Results
+The test script will validate:
+- ✅ **Direct Agent**: Simple AI conversations using Gemini API
+- ✅ **Tool Calling Agent**: AI with tools (weather, calculator, time)
+- ✅ **Operator Functionality**: Resource creation and management
+- ✅ **Service Integration**: API endpoints and health checks

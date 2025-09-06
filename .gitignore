@@ -103,4 +103,4 @@ local-testing/**/__pycache__/
 
 # Project-specific files to exclude
 prompt1.txt
-
+*.prompt

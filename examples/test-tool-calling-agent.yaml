@@ -1,0 +1,60 @@
+# Test Agent for Tool Calling Framework
+# AI agent with tools that can call public services
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: test-gemini-secret
+  namespace: default
+type: Opaque
+stringData:
+  api-key: "AIzaSyBvSRDoiR1n0RxmNTiHu5DfT7MmI42VGT4"
+---
+apiVersion: ai.example.com/v1
+kind: Agent
+metadata:
+  name: test-tool-agent
+  namespace: default
+  labels:
+    app.kubernetes.io/name: kubeagentic
+    app.kubernetes.io/instance: test-tool-agent
+spec:
+  provider: gemini
+  model: gemini-pro
+  systemPrompt: |
+    You are a helpful AI assistant with access to tools.
+    Use the available tools to provide accurate information.
+    When using tools, explain what you're doing and why.
+  apiSecretRef:
+    name: test-gemini-secret
+    key: api-key
+  framework: direct
+  tools:
+  - name: "get_weather"
+    description: "Get current weather information for a city"
+    inputSchema:
+      type: "object"
+      properties:
+        city:
+          type: "string"
+          description: "Name of the city"
+      required: ["city"]
+  - name: "get_time"
+    description: "Get current time information"
+    inputSchema:
+      type: "object"
+      properties:
+        timezone:
+          type: "string"
+          description: "Timezone (optional)"
+          default: "UTC"
+  - name: "calculate"
+    description: "Perform mathematical calculations"
+    inputSchema:
+      type: "object"
+      properties:
+        expression:
+          type: "string"
+          description: "Mathematical expression to evaluate"
+      required: ["expression"]
+  replicas: 1

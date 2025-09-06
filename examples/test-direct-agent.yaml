@@ -1,0 +1,31 @@
+# Test Agent for Direct Framework
+# Simple AI agent using direct API calls
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: test-gemini-secret
+  namespace: default
+type: Opaque
+stringData:
+  api-key: "AIzaSyBvSRDoiR1n0RxmNTiHu5DfT7MmI42VGT4"
+---
+apiVersion: ai.example.com/v1
+kind: Agent
+metadata:
+  name: test-direct-agent
+  namespace: default
+  labels:
+    app.kubernetes.io/name: kubeagentic
+    app.kubernetes.io/instance: test-direct-agent
+spec:
+  provider: gemini
+  model: gemini-pro
+  systemPrompt: |
+    You are a helpful AI assistant that provides clear and concise responses.
+    Keep your answers brief and to the point.
+  apiSecretRef:
+    name: test-gemini-secret
+    key: api-key
+  framework: direct
+  replicas: 1
