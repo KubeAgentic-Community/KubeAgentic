@@ -11,7 +11,7 @@ twitter:
   username: kubeagentic
   card: summary_large_image
 github:
-  username: sudeshmu
+  username: KubeAgentic-Community
   repository_url: https://github.com/KubeAgentic-Community/KubeAgentic
 
 # Build settings
@@ -76,7 +76,7 @@ defaults:
 repository: KubeAgentic-Community/KubeAgentic
 
 # Social links
-github_username: sudeshmu
+github_username: KubeAgentic-Community
 
 # Exclude from processing
 exclude:

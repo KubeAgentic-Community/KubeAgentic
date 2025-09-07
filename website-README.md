@@ -62,9 +62,9 @@ The website is automatically deployed when you push to the main branch.
 3. **Update Repository URL**:
    Edit `_config.yml`:
    ```yaml
-   url: "https://sudeshmu.github.io"
+   url: "https://KubeAgentic-Community.github.io"
    repository: KubeAgentic-Community/kubeagentic
-   github_username: sudeshmu
+   github_username: KubeAgentic-Community
    ```
 
 ## 📁 Content Management
