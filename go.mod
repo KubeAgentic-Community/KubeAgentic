@@ -1,4 +1,4 @@
-module github.com/sudeshmu/kubeagentic
+module github.com/KubeAgentic-Community/kubeagentic
 
 go 1.21
 

@@ -13,7 +13,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/webhook"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 
-	aiv1 "github.com/sudeshmu/kubeagentic/api/v1"
+	aiv1 "github.com/KubeAgentic-Community/kubeagentic/api/v1"
 )
 
 // +kubebuilder:webhook:path=/mutate-ai-example-com-v1-agent,mutating=true,failurePolicy=fail,sideEffects=None,groups=ai.example.com,resources=agents,verbs=create;update,versions=v1,name=magent.kb.io,admissionReviewVersions=v1

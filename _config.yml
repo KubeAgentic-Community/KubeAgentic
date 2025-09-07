@@ -12,7 +12,7 @@ twitter:
   card: summary_large_image
 github:
   username: sudeshmu
-  repository_url: https://github.com/sudeshmu/KubeAgentic
+  repository_url: https://github.com/KubeAgentic-Community/KubeAgentic
 
 # Build settings
 markdown: kramdown
@@ -73,7 +73,7 @@ defaults:
       layout: "page"
 
 # GitHub Pages settings
-repository: sudeshmu/KubeAgentic
+repository: KubeAgentic-Community/KubeAgentic
 
 # Social links
 github_username: sudeshmu

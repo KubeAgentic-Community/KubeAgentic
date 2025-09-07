@@ -216,15 +216,15 @@ Help improve the documentation:
 
 ## 🔗 Additional Resources
 
-- **Website**: [https://sudeshmu.github.io/KubeAgentic/](https://sudeshmu.github.io/KubeAgentic/)
-- **GitHub**: [https://github.com/sudeshmu/KubeAgentic](https://github.com/sudeshmu/KubeAgentic)
+- **Website**: [https://KubeAgentic-Community.github.io/KubeAgentic/](https://KubeAgentic-Community.github.io/KubeAgentic/)
+- **GitHub**: [https://github.com/KubeAgentic-Community/KubeAgentic](https://github.com/KubeAgentic-Community/KubeAgentic)
 - **Examples**: [/examples directory](../examples/)
 - **Local Testing**: [/local-testing directory](../local-testing/)
 
 ## 📞 Support
 
-- **Documentation Issues**: [GitHub Issues](https://github.com/sudeshmu/KubeAgentic/issues)
-- **Feature Requests**: [GitHub Discussions](https://github.com/sudeshmu/KubeAgentic/discussions)
+- **Documentation Issues**: [GitHub Issues](https://github.com/KubeAgentic-Community/KubeAgentic/issues)
+- **Feature Requests**: [GitHub Discussions](https://github.com/KubeAgentic-Community/KubeAgentic/discussions)
 - **Community**: Check the repository for community guidelines
 
 Choose your framework, configure your agent, and start building intelligent systems on Kubernetes!

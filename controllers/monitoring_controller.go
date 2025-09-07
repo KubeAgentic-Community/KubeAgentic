@@ -15,7 +15,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	aiv1 "github.com/sudeshmu/kubeagentic/api/v1"
+	aiv1 "github.com/KubeAgentic-Community/kubeagentic/api/v1"
 )
 
 // MonitoringReconciler handles monitoring and observability for agents

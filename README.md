@@ -7,9 +7,9 @@
   
   <p align="center">
     <a href="https://kubeagentic.com"><img src="https://img.shields.io/badge/Website-kubeagentic.com-blue?style=for-the-badge" alt="Website"></a>
-    <a href="https://github.com/sudeshmu/KubeAgentic/releases"><img src="https://img.shields.io/github/v/release/sudeshmu/KubeAgentic?style=for-the-badge" alt="Release"></a>
-    <a href="https://github.com/sudeshmu/KubeAgentic/blob/main/LICENSE"><img src="https://img.shields.io/github/license/sudeshmu/KubeAgentic?style=for-the-badge" alt="License"></a>
-    <a href="https://github.com/sudeshmu/KubeAgentic/stargazers"><img src="https://img.shields.io/github/stars/sudeshmu/KubeAgentic?style=for-the-badge" alt="Stars"></a>
+    <a href="https://github.com/KubeAgentic-Community/KubeAgentic/releases"><img src="https://img.shields.io/github/v/release/KubeAgentic-Community/KubeAgentic?style=for-the-badge" alt="Release"></a>
+    <a href="https://github.com/KubeAgentic-Community/KubeAgentic/blob/main/LICENSE"><img src="https://img.shields.io/github/license/KubeAgentic-Community/KubeAgentic?style=for-the-badge" alt="License"></a>
+    <a href="https://github.com/KubeAgentic-Community/KubeAgentic/stargazers"><img src="https://img.shields.io/github/stars/KubeAgentic-Community/KubeAgentic?style=for-the-badge" alt="Stars"></a>
   </p>
 </div>
 

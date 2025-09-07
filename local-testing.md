@@ -14,7 +14,7 @@ The fastest way to get started with local testing:
 
 ```bash
 # Clone the repository
-git clone https://github.com/sudeshmu/kubeagentic.git
+git clone https://github.com/KubeAgentic-Community/kubeagentic.git
 cd kubeagentic
 
 # Quick test with Docker
@@ -581,8 +581,8 @@ When adding new features:
 
 ## 📚 Additional Resources
 
-- [Comprehensive Testing Documentation](https://github.com/sudeshmu/kubeagentic/blob/main/local-testing/docs/TESTING.md)
-- [Main Project README](https://github.com/sudeshmu/kubeagentic/blob/main/README.md)
+- [Comprehensive Testing Documentation](https://github.com/KubeAgentic-Community/kubeagentic/blob/main/local-testing/docs/TESTING.md)
+- [Main Project README](https://github.com/KubeAgentic-Community/kubeagentic/blob/main/README.md)
 - [Examples and Use Cases](examples.html)
 - [API Reference](api-reference.html)
 

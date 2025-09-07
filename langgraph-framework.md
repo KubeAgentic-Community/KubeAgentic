@@ -412,9 +412,9 @@ edges:
 
 Explore comprehensive examples in our repository:
 
-- [`langgraph-workflow-agent.yaml`](https://github.com/sudeshmu/KubeAgentic/blob/main/examples/langgraph-workflow-agent.yaml) - Advanced customer service workflow
-- [Research Agent](https://github.com/sudeshmu/KubeAgentic/blob/main/docs/langgraph-framework.md#2-research-and-analysis-workflow) - Multi-step research pipeline
-- [Decision Engine](https://github.com/sudeshmu/KubeAgentic/blob/main/docs/langgraph-framework.md#3-complex-decision-engine) - Business decision analysis
+- [`langgraph-workflow-agent.yaml`](https://github.com/KubeAgentic-Community/KubeAgentic/blob/main/examples/langgraph-workflow-agent.yaml) - Advanced customer service workflow
+- [Research Agent](https://github.com/KubeAgentic-Community/KubeAgentic/blob/main/docs/langgraph-framework.md#2-research-and-analysis-workflow) - Multi-step research pipeline
+- [Decision Engine](https://github.com/KubeAgentic-Community/KubeAgentic/blob/main/docs/langgraph-framework.md#3-complex-decision-engine) - Business decision analysis
 
 ## Next Steps
 

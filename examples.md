@@ -615,6 +615,6 @@ To use any of these examples:
 - [Documentation](docs/) - Complete setup guide
 - [API Reference](api-reference.html) - Detailed API specification  
 - [Local Testing](local-testing.html) - Development environment setup
-- [GitHub Repository](https://github.com/sudeshmu/kubeagentic) - Source code and issues
+- [GitHub Repository](https://github.com/KubeAgentic-Community/kubeagentic) - Source code and issues
 
 Ready to deploy your own AI agents? Start with the [Quick Start Guide](docs/#quick-start-guide)!

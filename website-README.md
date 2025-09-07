@@ -1,6 +1,6 @@
 # KubeAgentic Website
 
-This directory contains the GitHub Pages website for KubeAgentic, built with Jekyll and hosted at `https://sudeshmu.github.io/kubeagentic`.
+This directory contains the GitHub Pages website for KubeAgentic, built with Jekyll and hosted at `https://KubeAgentic-Community.github.io/kubeagentic`.
 
 ## 🌐 Website Structure
 
@@ -63,7 +63,7 @@ The website is automatically deployed when you push to the main branch.
    Edit `_config.yml`:
    ```yaml
    url: "https://sudeshmu.github.io"
-   repository: sudeshmu/kubeagentic
+   repository: KubeAgentic-Community/kubeagentic
    github_username: sudeshmu
    ```
 
@@ -470,4 +470,4 @@ If GitHub Pages limitations are reached:
 
 ---
 
-For technical questions about the website, please open an issue in the [KubeAgentic repository](https://github.com/sudeshmu/kubeagentic/issues).
+For technical questions about the website, please open an issue in the [KubeAgentic repository](https://github.com/KubeAgentic-Community/kubeagentic/issues).

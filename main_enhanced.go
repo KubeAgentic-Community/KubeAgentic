@@ -16,9 +16,9 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 	"sigs.k8s.io/controller-runtime/pkg/metrics/server"
 
-	aiv1 "github.com/sudeshmu/kubeagentic/api/v1"
-	"github.com/sudeshmu/kubeagentic/api/webhook/v1"
-	"github.com/sudeshmu/kubeagentic/controllers"
+	aiv1 "github.com/KubeAgentic-Community/kubeagentic/api/v1"
+	"github.com/KubeAgentic-Community/kubeagentic/api/webhook/v1"
+	"github.com/KubeAgentic-Community/kubeagentic/controllers"
 	// +kubebuilder:scaffold:imports
 )
 

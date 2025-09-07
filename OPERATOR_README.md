@@ -316,6 +316,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## 🆘 Support
 
 - **Documentation**: [https://kubeagentic.com](https://kubeagentic.com)
-- **Issues**: [GitHub Issues](https://github.com/sudeshmu/KubeAgentic/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/sudeshmu/KubeAgentic/discussions)
+- **Issues**: [GitHub Issues](https://github.com/KubeAgentic-Community/KubeAgentic/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/KubeAgentic-Community/KubeAgentic/discussions)
 - **Email**: contact@kubeagentic.com

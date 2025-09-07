@@ -43,12 +43,12 @@ Install KubeAgentic using one of these methods:
 
 **Option 1: Direct Installation**
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/sudeshmu/kubeagentic/main/deploy/all.yaml
+kubectl apply -f https://raw.githubusercontent.com/KubeAgentic-Community/kubeagentic/main/deploy/all.yaml
 ```
 
 **Option 2: Local Installation**
 ```bash
-git clone https://github.com/sudeshmu/kubeagentic.git
+git clone https://github.com/KubeAgentic-Community/kubeagentic.git
 cd kubeagentic
 kubectl apply -f deploy/all.yaml
 ```

@@ -107,7 +107,7 @@ body { margin: 0; padding: 0; }
       <a href="#quick-start" class="cta-button cta-primary">
         🚀 Get Started Now
       </a>
-      <a href="https://github.com/sudeshmu/KubeAgentic" class="cta-button cta-secondary external-link">
+      <a href="https://github.com/KubeAgentic-Community/KubeAgentic" class="cta-button cta-secondary external-link">
         View on GitHub
       </a>
     </div>
@@ -160,14 +160,14 @@ body { margin: 0; padding: 0; }
     
     <div class="code-block">
 # Install KubeAgentic
-kubectl apply -f https://raw.githubusercontent.com/sudeshmu/KubeAgentic/main/deploy/all.yaml
+kubectl apply -f https://raw.githubusercontent.com/KubeAgentic-Community/KubeAgentic/main/deploy/all.yaml
 
 # Create API key secret
 kubectl create secret generic openai-secret \
   --from-literal=api-key='your-openai-api-key'
 
 # Deploy your first agent
-kubectl apply -f https://raw.githubusercontent.com/sudeshmu/KubeAgentic/main/examples/openai-agent.yaml
+kubectl apply -f https://raw.githubusercontent.com/KubeAgentic-Community/KubeAgentic/main/examples/openai-agent.yaml
 
 # Interact with your agent
 kubectl port-forward service/my-assistant-service 8080:80
@@ -177,7 +177,7 @@ curl -X POST http://localhost:8080/chat \
     </div>
     
     <div style="text-align: center; margin-top: 2rem;">
-      <a href="https://github.com/sudeshmu/KubeAgentic/tree/main/examples" class="cta-button cta-primary external-link">
+      <a href="https://github.com/KubeAgentic-Community/KubeAgentic/tree/main/examples" class="cta-button cta-primary external-link">
         View All Examples
       </a>
     </div>
@@ -294,17 +294,17 @@ curl -X POST http://localhost:8080/chat \
       <div>
         <h3 style="color: #42b883; margin-bottom: 1rem; font-size: 1.2rem;">GitHub</h3>
         <p style="margin-bottom: 1rem; color: #bdc3c7;">Star us on GitHub and contribute</p>
-        <a href="https://github.com/sudeshmu/KubeAgentic" class="cta-button cta-secondary external-link" style="color: #42b883; border-color: #42b883;">View Repository →</a>
+        <a href="https://github.com/KubeAgentic-Community/KubeAgentic" class="cta-button cta-secondary external-link" style="color: #42b883; border-color: #42b883;">View Repository →</a>
       </div>
       <div>
         <h3 style="color: #42b883; margin-bottom: 1rem; font-size: 1.2rem;">Issues</h3>
         <p style="margin-bottom: 1rem; color: #bdc3c7;">Report bugs and request features</p>
-        <a href="https://github.com/sudeshmu/KubeAgentic/issues" class="cta-button cta-secondary external-link" style="color: #42b883; border-color: #42b883;">Report Issue →</a>
+        <a href="https://github.com/KubeAgentic-Community/KubeAgentic/issues" class="cta-button cta-secondary external-link" style="color: #42b883; border-color: #42b883;">Report Issue →</a>
       </div>
       <div>
         <h3 style="color: #42b883; margin-bottom: 1rem; font-size: 1.2rem;">Discussions</h3>
         <p style="margin-bottom: 1rem; color: #bdc3c7;">Join the community discussions</p>
-        <a href="https://github.com/sudeshmu/KubeAgentic/discussions" class="cta-button cta-secondary external-link" style="color: #42b883; border-color: #42b883;">Join Discussion →</a>
+        <a href="https://github.com/KubeAgentic-Community/KubeAgentic/discussions" class="cta-button cta-secondary external-link" style="color: #42b883; border-color: #42b883;">Join Discussion →</a>
       </div>
       <div>
         <h3 style="color: #42b883; margin-bottom: 1rem; font-size: 1.2rem;">Contact</h3>
@@ -315,7 +315,7 @@ curl -X POST http://localhost:8080/chat \
     
     <div style="border-top: 1px solid #34495e; padding-top: 2rem; margin-top: 2rem;">
       <p style="color: #95a5a6; margin-bottom: 1rem;">
-        Licensed under the Apache License 2.0. See <a href="https://github.com/sudeshmu/KubeAgentic/blob/main/LICENSE" style="color: #42b883;">LICENSE</a> for details.
+        Licensed under the Apache License 2.0. See <a href="https://github.com/KubeAgentic-Community/KubeAgentic/blob/main/LICENSE" style="color: #42b883;">LICENSE</a> for details.
       </p>
       <p style="color: #95a5a6;">
         © 2025 KubeAgentic. Built with ❤️ for the Kubernetes community.
