@@ -216,7 +216,7 @@ Help improve the documentation:
 
 ## 🔗 Additional Resources
 
-- **Website**: [https://KubeAgentic-Community.github.io/KubeAgentic/](https://KubeAgentic-Community.github.io/KubeAgentic/)
+- **Website**: [https://kubeagentic-community.github.io/KubeAgenticWebsite/](https://kubeagentic-community.github.io/KubeAgenticWebsite/)
 - **GitHub**: [https://github.com/KubeAgentic-Community/KubeAgentic](https://github.com/KubeAgentic-Community/KubeAgentic)
 - **Examples**: [/examples directory](../examples/)
 - **Local Testing**: [/local-testing directory](../local-testing/)
