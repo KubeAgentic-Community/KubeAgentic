@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM registry.access.redhat.com/ubi9/python-311:latest
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -12,9 +12,7 @@ RUN groupadd -r agent && useradd -r -g agent agent
 WORKDIR /app
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+RUN dnf install -y curl && dnf clean all
 
 # Copy requirements first to leverage Docker cache
 COPY agent/requirements.txt .
