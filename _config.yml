@@ -41,6 +41,7 @@ header_pages:
   - index.md
   - direct-framework.md
   - langgraph-framework.md
+  - yaml-generator.md
   - api-reference.md
   - examples.md
   - local-testing.md
