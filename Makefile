@@ -1,6 +1,6 @@
 # Image URL to use all building/pushing image targets
-OPERATOR_IMG ?= kubeagentic/operator:latest
-AGENT_IMG ?= kubeagentic/agent:latest
+OPERATOR_IMG ?= sudeshmu/kubeagentic:operator-latest
+AGENT_IMG ?= sudeshmu/kubeagentic:agent-latest
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 ifeq (,$(shell go env GOBIN))

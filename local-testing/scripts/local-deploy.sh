@@ -44,8 +44,8 @@ if kubectl config current-context | grep -q "kind"; then
     kind load docker-image kubeagentic/agent:local
     
     # Update image references for local testing
-    sed -i.bak 's|kubeagentic/operator:latest|kubeagentic/operator:local|g' deploy/operator.yaml
-    sed -i.bak 's|kubeagentic/agent:latest|kubeagentic/agent:local|g' controllers/agent_controller.go
+    sed -i.bak 's|sudeshmu/kubeagentic:operator-latest|kubeagentic/operator:local|g' deploy/operator.yaml
+    sed -i.bak 's|sudeshmu/kubeagentic:agent-latest|kubeagentic/agent:local|g' controllers/agent_controller.go
 
 # For minikube, point docker to minikube's docker daemon
 elif kubectl config current-context | grep -q "minikube"; then
@@ -57,8 +57,8 @@ elif kubectl config current-context | grep -q "minikube"; then
     docker build -f Dockerfile.agent -t kubeagentic/agent:local .
     
     # Update image references
-    sed -i.bak 's|kubeagentic/operator:latest|kubeagentic/operator:local|g' deploy/operator.yaml
-    sed -i.bak 's|kubeagentic/agent:latest|kubeagentic/agent:local|g' controllers/agent_controller.go
+    sed -i.bak 's|sudeshmu/kubeagentic:operator-latest|kubeagentic/operator:local|g' deploy/operator.yaml
+    sed -i.bak 's|sudeshmu/kubeagentic:agent-latest|kubeagentic/agent:local|g' controllers/agent_controller.go
 
 # For other clusters (like k3d), try direct build
 else
@@ -67,8 +67,8 @@ else
     docker build -f Dockerfile.agent -t kubeagentic/agent:local .
     
     # Update image references
-    sed -i.bak 's|kubeagentic/operator:latest|kubeagentic/operator:local|g' deploy/operator.yaml
-    sed -i.bak 's|kubeagentic/agent:latest|kubeagentic/agent:local|g' controllers/agent_controller.go
+    sed -i.bak 's|sudeshmu/kubeagentic:operator-latest|kubeagentic/operator:local|g' deploy/operator.yaml
+    sed -i.bak 's|sudeshmu/kubeagentic:agent-latest|kubeagentic/agent:local|g' controllers/agent_controller.go
 fi
 
 # Deploy the system
@@ -85,7 +85,7 @@ kubectl apply -f deploy/rbac.yaml
 
 echo "  → Deploying operator..."
 # Use local image tag
-sed 's|kubeagentic/operator:latest|kubeagentic/operator:local|g' deploy/operator.yaml | kubectl apply -f -
+sed 's|sudeshmu/kubeagentic:operator-latest|kubeagentic/operator:local|g' deploy/operator.yaml | kubectl apply -f -
 
 echo "⏳ Waiting for operator to be ready..."
 kubectl wait --for=condition=Available -n kubeagentic-system deployment/kubeagentic-operator --timeout=300s
@@ -119,7 +119,7 @@ if [[ $deploy_test =~ ^[Yy]$ ]]; then
                     --dry-run=client -o yaml | kubectl apply -f -
                 
                 # Use local agent image
-                sed 's|kubeagentic/agent:latest|kubeagentic/agent:local|g' examples/openai-agent.yaml | kubectl apply -f -
+                sed 's|sudeshmu/kubeagentic:agent-latest|kubeagentic/agent:local|g' examples/openai-agent.yaml | kubectl apply -f -
                 echo "✅ OpenAI agent deployed!"
             fi
             ;;
@@ -136,7 +136,7 @@ if [[ $deploy_test =~ ^[Yy]$ ]]; then
                 --dry-run=client -o yaml | kubectl apply -f -
             
             # Deploy vLLM agent
-            sed 's|kubeagentic/agent:latest|kubeagentic/agent:local|g' examples/vllm-agent.yaml | kubectl apply -f -
+            sed 's|sudeshmu/kubeagentic:agent-latest|kubeagentic/agent:local|g' examples/vllm-agent.yaml | kubectl apply -f -
             echo "✅ Mock vLLM agent deployed!"
             ;;
         3)
@@ -147,7 +147,7 @@ if [[ $deploy_test =~ ^[Yy]$ ]]; then
                     --from-literal=api-key="$api_key" \
                     --dry-run=client -o yaml | kubectl apply -f -
                 
-                sed 's|kubeagentic/agent:latest|kubeagentic/agent:local|g' examples/openai-agent.yaml | kubectl apply -f -
+                sed 's|sudeshmu/kubeagentic:agent-latest|kubeagentic/agent:local|g' examples/openai-agent.yaml | kubectl apply -f -
             fi
             
             # Deploy mock vLLM
@@ -160,7 +160,7 @@ if [[ $deploy_test =~ ^[Yy]$ ]]; then
                 --from-literal=api-key="mock-api-key" \
                 --dry-run=client -o yaml | kubectl apply -f -
             
-            sed 's|kubeagentic/agent:latest|kubeagentic/agent:local|g' examples/vllm-agent.yaml | kubectl apply -f -
+            sed 's|sudeshmu/kubeagentic:agent-latest|kubeagentic/agent:local|g' examples/vllm-agent.yaml | kubectl apply -f -
             echo "✅ Both agents deployed!"
             ;;
     esac

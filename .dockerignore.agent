@@ -1,0 +1,91 @@
+# Git and version control
+.git/
+.gitignore
+
+# Documentation
+README.md
+docs/
+*.md
+
+# Development files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+
+# Build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+
+# Testing
+.coverage
+.pytest_cache/
+.tox/
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+.tmp/
+temp/
+
+# Local testing
+local-testing/
+test/
+examples/
+
+# Kubernetes and deployment files (exclude from agent build)
+deploy/
+crd/
+controllers/
+api/
+*.yaml
+*.yml
+
+# Go files (not needed for agent build)
+*.go
+go.mod
+go.sum
+
+# Makefiles
+Makefile*
+
+# Scripts
+scripts/
