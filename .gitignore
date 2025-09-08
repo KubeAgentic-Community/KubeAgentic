@@ -109,3 +109,6 @@ prompt1.txt
 .claude/
 input.prompt
 projectContext.prompt
+
+# Issue planning files
+issues_create_080923.txt
