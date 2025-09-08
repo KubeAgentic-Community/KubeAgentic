@@ -1,38 +1,48 @@
-FROM registry.access.redhat.com/ubi9/python-311:latest
+# Multi-stage build for optimized image size
+# Build stage - use full Python environment for dependency installation
+FROM registry.access.redhat.com/ubi9/python-311:latest AS builder
+
+# Set environment variables for build
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# Switch to root to create venv in system location
+USER root
+
+# Create virtual environment to contain dependencies
+RUN python -m venv /opt/venv && \
+    chmod -R 755 /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Copy requirements and install dependencies
+COPY agent/requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r /tmp/requirements.txt
+
+# Runtime stage - use minimal base image  
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
+
+# Install Python runtime using microdnf
+RUN microdnf install -y python3.11 python3.11-libs && \
+    microdnf clean all
+
+# Copy virtual environment from builder stage
+COPY --from=builder /opt/venv /opt/venv
 
 # Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-ENV PORT=8080
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PORT=8080 \
+    PATH="/opt/venv/bin:$PATH"
 
-# Create non-root user
-RUN groupadd -r agent && useradd -r -g agent agent
-
-# Set work directory
+# Set work directory and copy application
 WORKDIR /app
-
-# Install system dependencies
-RUN dnf install -y curl && dnf clean all
-
-# Copy requirements first to leverage Docker cache
-COPY agent/requirements.txt .
-
-# Install Python dependencies
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
-
-# Copy application code
 COPY agent/main.py .
 
-# Change ownership to non-root user
-RUN chown -R agent:agent /app
-
-# Switch to non-root user
-USER agent
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:${PORT}/health || exit 1
+# Use non-root user (ubi-micro default user)
+USER 1001
 
 # Expose port
 EXPOSE ${PORT}

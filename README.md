@@ -7,6 +7,7 @@
   
   <p align="center">
     <a href="https://kubeagentic.com"><img src="https://img.shields.io/badge/Website-kubeagentic.com-blue?style=for-the-badge" alt="Website"></a>
+    <a href="https://hub.docker.com/r/sudeshmu/kubeagentic"><img src="https://img.shields.io/docker/pulls/sudeshmu/kubeagentic?style=for-the-badge" alt="Docker Pulls"></a>
     <a href="https://github.com/KubeAgentic-Community/KubeAgentic/releases"><img src="https://img.shields.io/github/v/release/KubeAgentic-Community/KubeAgentic?style=for-the-badge" alt="Release"></a>
     <a href="https://github.com/KubeAgentic-Community/KubeAgentic/blob/main/LICENSE"><img src="https://img.shields.io/github/license/KubeAgentic-Community/KubeAgentic?style=for-the-badge" alt="License"></a>
     <a href="https://github.com/KubeAgentic-Community/KubeAgentic/stargazers"><img src="https://img.shields.io/github/stars/KubeAgentic-Community/KubeAgentic?style=for-the-badge" alt="Stars"></a>
@@ -55,11 +56,35 @@ You can install the KubeAgentic operator and its components using the following 
 
 ```bash
 # This will install the CRD, RBAC, and the operator deployment.
-# For remote installation (replace with your actual repository URL)
-kubectl apply -f https://raw.githubusercontent.com/your-org/kubeagentic/main/deploy/all.yaml
+# For remote installation
+kubectl apply -f https://raw.githubusercontent.com/KubeAgentic-Community/kubeagentic/main/deploy/all.yaml
 
 # For local installation
 kubectl apply -f deploy/all.yaml
+```
+
+### 🐳 Docker Images
+
+KubeAgentic provides optimized Docker images hosted on Docker Hub:
+
+- **Operator Image**: `sudeshmu/kubeagentic:operator-latest` (108MB)
+- **Agent Runtime**: `sudeshmu/kubeagentic:agent-latest` (625MB - 66% smaller than original)
+
+**Image Optimization Features:**
+- Multi-stage builds for minimal size
+- Red Hat UBI Minimal base images for security
+- Non-root user execution
+- Optimized Python dependencies
+
+**Available Tags:**
+- `operator-latest`: Latest stable operator
+- `agent-latest`: Latest optimized agent runtime
+- `agent-optimized`: Explicitly optimized agent version
+
+```bash
+# Pull images directly
+docker pull sudeshmu/kubeagentic:operator-latest
+docker pull sudeshmu/kubeagentic:agent-latest
 ```
 
 ### 2. Create an API Key Secret

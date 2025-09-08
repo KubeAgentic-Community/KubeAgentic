@@ -28,6 +28,32 @@ A comprehensive Kubernetes operator for deploying and managing AI agents with ad
 - Go 1.19+ (for building from source)
 - Docker (for building images)
 
+## 🐳 Docker Images
+
+**Optimized Multi-Architecture Images on Docker Hub:**
+
+| Component | Image | Size | Architecture | Base |
+|-----------|-------|------|--------------|------|
+| Operator | `sudeshmu/kubeagentic:operator-latest` | 108MB | linux/amd64, linux/arm64 | UBI Micro |
+| Agent Runtime | `sudeshmu/kubeagentic:agent-latest` | 625MB | linux/amd64, linux/arm64 | UBI Minimal |
+
+**Image Optimization Highlights:**
+- **66% size reduction** for agent runtime (1.85GB → 625MB)
+- Multi-stage builds for minimal final image size
+- Red Hat Universal Base Images (UBI) for enterprise security
+- Non-root execution with proper security contexts
+- Optimized Python virtual environments
+
+**Available Tags:**
+- `operator-latest`: Latest stable operator release
+- `agent-latest`: Latest optimized agent runtime
+- `agent-optimized`: Explicitly tagged optimized version
+
+```bash
+# Quick verification of image sizes
+docker images sudeshmu/kubeagentic
+```
+
 ## 🛠️ Installation
 
 ### Option 1: Deploy with kubectl
@@ -47,11 +73,15 @@ kubectl get crd agents.ai.example.com
 # Build the operator
 make build
 
-# Build and push the Docker image
+# Build and push the Docker image (or use pre-built images)
 make docker-build docker-push
 
-# Deploy
+# Deploy with pre-built optimized images
 kubectl apply -f deploy/operator-enhanced.yaml
+
+# Or pull optimized images from Docker Hub
+docker pull sudeshmu/kubeagentic:operator-latest  # 108MB optimized operator
+docker pull sudeshmu/kubeagentic:agent-latest     # 625MB optimized agent runtime
 ```
 
 ## �� Usage
@@ -284,8 +314,8 @@ kubectl set env deployment/kubeagentic-operator -n kubeagentic-system LOG_LEVEL=
 ### Updating the Operator
 
 ```bash
-# Update the operator image
-kubectl set image deployment/kubeagentic-operator -n kubeagentic-system operator=kubeagentic/operator:v1.1.0
+# Update the operator image (using optimized Docker Hub image)
+kubectl set image deployment/kubeagentic-operator -n kubeagentic-system operator=sudeshmu/kubeagentic:operator-latest
 
 # Restart the operator
 kubectl rollout restart deployment/kubeagentic-operator -n kubeagentic-system

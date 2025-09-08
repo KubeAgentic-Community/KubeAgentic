@@ -450,7 +450,7 @@ spec:
       serviceAccountName: kubeagentic-operator
       containers:
       - name: operator
-        image: kubeagentic/operator:latest
+        image: sudeshmu/kubeagentic:operator-latest
         imagePullPolicy: Always
         args:
         - --leader-elect

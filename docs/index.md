@@ -53,9 +53,19 @@ cd kubeagentic
 kubectl apply -f deploy/all.yaml
 ```
 
-**Option 3: Helm Chart** (Coming Soon)
+**Option 3: Using Docker Hub Images Directly**
 ```bash
-helm repo add kubeagentic https://your-username.github.io/kubeagentic
+# Pull optimized images
+docker pull sudeshmu/kubeagentic:operator-latest  # 108MB
+docker pull sudeshmu/kubeagentic:agent-latest     # 625MB (66% smaller!)
+
+# Then apply manifests
+kubectl apply -f deploy/all.yaml
+```
+
+**Option 4: Helm Chart** (Coming Soon)
+```bash
+helm repo add kubeagentic https://kubeagentic-community.github.io/kubeagentic
 helm install kubeagentic kubeagentic/kubeagentic
 ```
 
