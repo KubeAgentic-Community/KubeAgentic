@@ -74,6 +74,21 @@ docker-push-agent: ## Push agent docker image.
 .PHONY: docker-push-all
 docker-push-all: docker-push-operator docker-push-agent ## Push all docker images.
 
+.PHONY: docker-buildx-operator
+docker-buildx-operator: ## Build and push multi-architecture operator image.
+	docker buildx build --platform linux/amd64,linux/arm64 -f Dockerfile.operator -t ${OPERATOR_IMG} --push .
+
+.PHONY: docker-buildx-agent
+docker-buildx-agent: ## Build and push multi-architecture agent image.
+	docker buildx build --platform linux/amd64,linux/arm64 -f Dockerfile.agent -t ${AGENT_IMG} --push .
+
+.PHONY: docker-buildx-all
+docker-buildx-all: docker-buildx-operator docker-buildx-agent ## Build and push all multi-architecture images.
+
+.PHONY: docker-multiarch
+docker-multiarch: ## Build and push multi-architecture images using script.
+	./scripts/build-multiarch.sh
+
 ##@ Deployment
 
 ifndef ignore-not-found

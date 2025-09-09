@@ -149,8 +149,12 @@ operator-build: ## Build the enhanced operator binary.
 	go build -o bin/kubeagentic-operator main_enhanced.go
 
 .PHONY: operator-docker-build
-operator-docker-build: ## Build the operator Docker image.
+operator-docker-build: ## Build the operator Docker image for local architecture.
 	docker build -f Dockerfile.operator -t sudeshmu/kubeagentic:operator-latest .
+
+.PHONY: operator-docker-buildx
+operator-docker-buildx: ## Build and push multi-architecture operator Docker image.
+	docker buildx build --platform linux/amd64,linux/arm64 -f Dockerfile.operator -t sudeshmu/kubeagentic:operator-latest --push .
 
 .PHONY: operator-deploy
 operator-deploy: ## Deploy the enhanced operator.
