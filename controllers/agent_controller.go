@@ -257,7 +257,7 @@ func (r *AgentReconciler) buildDeployment(agent *aiv1.Agent) *appsv1.Deployment 
 					Containers: []corev1.Container{
 						{
 							Name:  "agent",
-							Image: "sudeshmu/kubeagentic:agent-latest", // This should be configurable in a real-world scenario.
+							Image: "sudeshmu/kubeagentic:agent-fixed", // This should be configurable in a real-world scenario.
 							Ports: []corev1.ContainerPort{
 								{ContainerPort: 8080, Protocol: corev1.ProtocolTCP},
 							},

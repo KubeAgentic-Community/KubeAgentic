@@ -1,17 +1,17 @@
-fastapi
-uvicorn[standard]
-pydantic
-openai
-anthropic
-google-generativeai
-httpx
-python-multipart
-python-json-logger
 
 # LangGraph dependencies (using latest compatible versions)
-langgraph
+anthropic
+backoff
+fastapi
+google-generativeai
+httpx
 langchain
-langchain-openai
 langchain-anthropic
 langchain-google-genai
-
+langchain-openai
+langgraph
+openai
+pydantic
+python-json-logger
+python-multipart
+uvicorn[standard]
