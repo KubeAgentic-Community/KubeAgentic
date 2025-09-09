@@ -1,10 +1,19 @@
-# KubeAgentic - Kubernetes AI Agent Operator
+# KubeAgentic - Multi-Architecture Kubernetes AI Agent Operator
 
 ![Docker Pulls](https://img.shields.io/docker/pulls/sudeshmu/kubeagentic)
 ![Image Size](https://img.shields.io/docker/image-size/sudeshmu/kubeagentic/operator-latest)
 ![GitHub Stars](https://img.shields.io/github/stars/KubeAgentic-Community/KubeAgentic)
+![Architectures](https://img.shields.io/badge/architectures-AMD64%20%7C%20ARM64-blue)
 
 Deploy and manage AI agents on Kubernetes with simple YAML configurations. KubeAgentic is a powerful Kubernetes operator that simplifies the deployment, management, and scaling of AI agents in your cluster.
+
+## 🏗️ **Multi-Architecture Support**
+
+**✅ Native support for both AMD64 and ARM64 architectures**
+- **Intel/AMD x86_64**: Traditional servers, VMs, most cloud instances
+- **ARM64**: Apple Silicon (M1/M2), AWS Graviton, GCP T2A, Azure Ampere
+- **Automatic Selection**: Kubernetes automatically picks the right architecture
+- **Single Manifest**: One image reference works on all platforms
 
 ## 🏷️ Available Images
 
@@ -12,19 +21,31 @@ Deploy and manage AI agents on Kubernetes with simple YAML configurations. KubeA
 ```bash
 docker pull sudeshmu/kubeagentic:operator-latest
 ```
-- **Size:** 108MB (Highly Optimized)
+- **Size:** ~219MB (Multi-stage optimized)
 - **Base:** Red Hat UBI Micro
-- **Architecture:** linux/amd64, linux/arm64
+- **Architectures:** `linux/amd64`, `linux/arm64`
 - **Purpose:** Kubernetes operator for managing agents
+- **Build:** Multi-architecture using Docker Buildx
 
 ### Agent Runtime
 ```bash
-docker pull sudeshmu/kubeagentic:agent-latest
+docker pull sudeshmu/kubeagentic:agent-fixed
 ```
-- **Size:** 625MB (66% smaller than original!)
+- **Size:** ~1.25GB (Includes all AI frameworks)
 - **Base:** Red Hat UBI Minimal  
-- **Architecture:** linux/amd64, linux/arm64
-- **Purpose:** Python-based agent runtime with AI frameworks
+- **Architectures:** `linux/amd64`, `linux/arm64`
+- **Purpose:** Python 3.11 + FastAPI + LangGraph/LangChain
+- **Features:** Direct + LangGraph framework support
+
+### ⚡ **Architecture-Specific Pulls**
+```bash
+# Automatically selects your platform
+docker pull sudeshmu/kubeagentic:agent-fixed
+
+# Force specific architecture
+docker pull --platform linux/amd64 sudeshmu/kubeagentic:agent-fixed
+docker pull --platform linux/arm64 sudeshmu/kubeagentic:agent-fixed
+```
 
 ## 🚀 Quick Start
 
@@ -46,30 +67,45 @@ metadata:
 spec:
   provider: openai
   model: gpt-4
+  framework: direct  # Choose: direct or langgraph
   systemPrompt: "You are a helpful assistant."
   apiSecretRef:
     name: openai-secret
     key: api-key
 ```
 
-## ✨ Image Optimization Features
+### 3. Test Multi-Architecture Deployment
+```bash
+# View image manifests
+docker buildx imagetools inspect sudeshmu/kubeagentic:operator-latest
+docker buildx imagetools inspect sudeshmu/kubeagentic:agent-fixed
 
-### Multi-Stage Builds
-- **Build Stage**: Full development environment for dependency installation
-- **Runtime Stage**: Minimal production environment with only essential components
-- **Result**: 66% size reduction for agent runtime (1.85GB → 625MB)
+# Test on different architectures
+docker run --rm --platform linux/amd64 sudeshmu/kubeagentic:agent-fixed python --version
+docker run --rm --platform linux/arm64 sudeshmu/kubeagentic:agent-fixed python --version
+```
 
-### Security Hardening
-- 🔒 **Non-root execution** with user ID 1001
+## ✨ Multi-Architecture Build Features
+
+### 🏗️ **Docker Buildx Integration**
+- **Cross-platform builds**: Single command builds for AMD64 + ARM64
+- **Manifest lists**: One image tag serves all architectures automatically
+- **Parallel builds**: Simultaneous compilation for faster CI/CD
+- **Registry optimization**: Efficient layer sharing between architectures
+
+### 🔒 **Security Hardening**
+- 🔒 **Non-root execution** with user ID 1001 (agent) and 65532 (operator)
 - 🛡️ **Red Hat Universal Base Images** (UBI) for enterprise security
 - 🔐 **Minimal attack surface** with only required packages
 - 🚫 **No package managers** in runtime images
+- 🏷️ **Attestation manifests** for supply chain security
 
-### Performance Optimizations
+### ⚡ **Performance Optimizations**
+- 🖥️ **Native execution** on both x86_64 and ARM64
 - ⚡ **Virtual environments** for isolated Python dependencies
 - 🗜️ **Layer optimization** with combined commands
-- 🚀 **Multi-architecture support** (AMD64 + ARM64)
 - 💾 **Efficient caching** with .dockerignore patterns
+- 🚀 **Platform-specific optimizations** during build
 
 ## 🏗️ Supported AI Providers
 
@@ -82,50 +118,131 @@ spec:
 
 ## 🔧 Configuration Examples
 
-### High-Performance Setup
+### 🚀 **High-Performance Setup (Direct Framework)**
 ```yaml
+apiVersion: ai.example.com/v1
+kind: Agent
+metadata:
+  name: high-performance-agent
 spec:
   provider: openai
   model: gpt-4
+  framework: direct  # Low latency, simple workflows
   replicas: 5
+  systemPrompt: "You are a high-performance assistant."
   resources:
     requests: {cpu: 200m, memory: 256Mi}
     limits: {cpu: 500m, memory: 512Mi}
-  framework: direct  # Low latency
+  apiSecretRef:
+    name: openai-secret
+    key: api-key
 ```
 
-### Complex Workflow Setup
+### 🧠 **Complex Workflow Setup (LangGraph Framework)**
 ```yaml
+apiVersion: ai.example.com/v1
+kind: Agent
+metadata:
+  name: workflow-agent
 spec:
-  provider: claude
+  provider: anthropic
   model: claude-3-sonnet-20240229
-  framework: langgraph
+  framework: langgraph  # Complex multi-step workflows
+  systemPrompt: "You are a workflow automation assistant."
   langgraphConfig:
     graphType: conditional
-    nodes: [...]  # Multi-step reasoning
+    nodes:
+      - name: analyze
+        type: llm
+      - name: tools
+        type: tool
+    edges:
+      - from: analyze
+        to: tools
+        condition: needs_tools
+    entrypoint: analyze
+  tools:
+    - calculator
+    - web_search
+  apiSecretRef:
+    name: anthropic-secret
+    key: api-key
 ```
 
-## 📊 Image Size Comparison
+### 🌐 **Multi-Architecture Deployment**
+```yaml
+# Works automatically on both AMD64 and ARM64 nodes
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubeagentic-operator
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+      - name: manager
+        image: sudeshmu/kubeagentic:operator-latest  # ← Auto-selects architecture
+        resources:
+          requests: {cpu: 100m, memory: 128Mi}
+          limits: {cpu: 200m, memory: 256Mi}
+```
 
-| Version | Operator | Agent Runtime | Total |
-|---------|----------|---------------|--------|
-| **Optimized** | 108MB | 625MB | 733MB |
-| Original | ~150MB | 1.85GB | ~2GB |
-| **Savings** | 28% | 66% | 63% |
+## 📊 Multi-Architecture Image Details
+
+| Component | AMD64 Size | ARM64 Size | Architectures | Base Image |
+|-----------|------------|------------|---------------|------------|
+| **Operator** | ~219MB | ~219MB | ✅ Both | UBI Micro |
+| **Agent** | ~1.25GB | ~1.25GB | ✅ Both | UBI Minimal |
+
+### 🏷️ **Image Manifests**
+```bash
+# Each image tag contains multiple architecture-specific manifests
+sudeshmu/kubeagentic:operator-latest
+├── linux/amd64 → sha256:2335acc4...
+├── linux/arm64 → sha256:08d4833d...
+└── attestations (security metadata)
+
+sudeshmu/kubeagentic:agent-fixed  
+├── linux/amd64 → sha256:c33d00cb...
+├── linux/arm64 → sha256:2cdf8f8e...
+└── attestations (security metadata)
+```
 
 ## 🛠️ Development & Customization
 
-### Build Your Own Images
+### 🏗️ **Build Multi-Architecture Images**
 ```bash
 # Clone the repository
 git clone https://github.com/KubeAgentic-Community/KubeAgentic.git
 cd KubeAgentic
 
-# Build operator
-docker build -f Dockerfile.operator -t my-kubeagentic:operator .
+# Setup buildx for multi-architecture builds
+make buildx-setup
 
-# Build agent runtime  
+# Build and push multi-architecture images
+make docker-buildx-all
+
+# Or build individually
+make docker-buildx-operator  # Build operator for AMD64 + ARM64
+make docker-buildx-agent     # Build agent for AMD64 + ARM64
+
+# Build locally without pushing (for development)
+make docker-buildx-local-all
+
+# Legacy single-architecture builds (if needed)
+docker build -f Dockerfile.operator -t my-kubeagentic:operator .
 docker build -f Dockerfile.agent -t my-kubeagentic:agent .
+```
+
+### 🔍 **Inspect Multi-Architecture Images**
+```bash
+# View detailed manifest information
+make inspect-images
+
+# Or manually inspect
+docker buildx imagetools inspect sudeshmu/kubeagentic:operator-latest
+docker buildx imagetools inspect sudeshmu/kubeagentic:agent-fixed
 ```
 
 ### Environment Variables
@@ -143,17 +260,32 @@ docker build -f Dockerfile.agent -t my-kubeagentic:agent .
 
 ## 📋 System Requirements
 
+### 🖥️ **Multi-Architecture Support**
+- **AMD64 nodes**: Intel/AMD x86_64 processors
+- **ARM64 nodes**: Apple Silicon, AWS Graviton, GCP T2A, Azure Ampere
+- **Mixed clusters**: Automatic architecture selection
+
 ### Minimum Requirements
 - **Kubernetes:** v1.19+
-- **CPU:** 100m per agent
-- **Memory:** 128Mi per agent
-- **Storage:** 1Gi for images
+- **CPU:** 100m per agent (both architectures)
+- **Memory:** 128Mi per agent (both architectures)
+- **Storage:** 1.5Gi for images (both architectures cached)
 
 ### Recommended for Production
 - **CPU:** 200-500m per agent
 - **Memory:** 256Mi-1Gi per agent  
-- **Replicas:** 2+ for high availability
+- **Replicas:** 2+ for high availability (can span architectures)
 - **Monitoring:** Prometheus + Grafana
+- **Node selection**: Mix of AMD64 and ARM64 for cost optimization
+
+### ☁️ **Cloud Provider Compatibility**
+
+| Provider | AMD64 Support | ARM64 Support | ARM Instance Types | Cost Savings |
+|----------|---------------|---------------|-------------------|--------------|
+| **AWS** | ✅ | ✅ | Graviton2/3 instances | Up to 40% |
+| **GCP** | ✅ | ✅ | T2A instances | Up to 35% |
+| **Azure** | ✅ | ✅ | Ampere Altra instances | Up to 50% |
+| **Local** | ✅ | ✅ | M1/M2 Macs, ARM SBCs | Native performance |
 
 ## 🔗 Links & Resources
 
@@ -165,11 +297,23 @@ docker build -f Dockerfile.agent -t my-kubeagentic:agent .
 
 ## 🏷️ Tags & Versioning
 
-| Tag | Description | Update Frequency |
-|-----|-------------|------------------|
-| `operator-latest` | Latest stable operator | On releases |
-| `agent-latest` | Latest optimized agent | On releases |
-| `agent-optimized` | Explicitly optimized version | On optimization updates |
+| Tag | Description | Architectures | Update Frequency |
+|-----|-------------|---------------|------------------|
+| `operator-latest` | Latest stable operator | AMD64, ARM64 | On releases |
+| `agent-fixed` | Production-ready agent with LangGraph | AMD64, ARM64 | On stable releases |
+| `agent-latest` | Development agent builds | AMD64, ARM64 | On commits |
+
+### 📦 **Multi-Architecture Tags**
+```bash
+# These tags automatically serve the correct architecture:
+sudeshmu/kubeagentic:operator-latest  # ✅ AMD64 + ARM64
+sudeshmu/kubeagentic:agent-fixed      # ✅ AMD64 + ARM64 (RECOMMENDED)
+sudeshmu/kubeagentic:agent-latest     # ✅ AMD64 + ARM64 (Development)
+
+# Architecture-specific tags (if needed):
+sudeshmu/kubeagentic:operator-latest@sha256:2335acc4...  # AMD64 only
+sudeshmu/kubeagentic:operator-latest@sha256:08d4833d...  # ARM64 only
+```
 
 ## 🤝 Contributing
 
@@ -181,6 +325,14 @@ Apache License 2.0 - see [LICENSE](https://github.com/KubeAgentic-Community/Kube
 
 ---
 
-**Built with ❤️ for the Kubernetes AI community**
+**🚀 Built with ❤️ for the Multi-Architecture Kubernetes AI Community**
 
-*These optimized images are built using multi-stage Docker builds with Red Hat UBI base images, ensuring security, performance, and minimal size for production deployments.*
+*These multi-architecture images are built using Docker Buildx with Red Hat UBI base images, ensuring security, performance, and native execution on both AMD64 and ARM64 architectures. Deploy once, run anywhere!*
+
+### 🎯 **Why Multi-Architecture?**
+- **💰 Cost savings**: Use ARM-based cloud instances (up to 50% cheaper)  
+- **⚡ Performance**: Native execution on Apple Silicon and ARM servers
+- **🌍 Flexibility**: Deploy on any Kubernetes cluster architecture
+- **🔮 Future-proof**: Ready for the ARM64 adoption wave
+
+**Experience the power of truly portable AI agents! 🤖✨**
