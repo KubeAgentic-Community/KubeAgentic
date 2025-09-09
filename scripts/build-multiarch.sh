@@ -16,20 +16,21 @@ if ! command -v docker &> /dev/null || ! docker buildx version &> /dev/null; the
 fi
 
 # Create or use multiarch builder
-echo "🔧 Setting up buildx builder..."
-if ! docker buildx inspect multiarch &> /dev/null; then
-    echo "Creating new multiarch builder..."
-    docker buildx create --name multiarch --driver docker-container --use
+BUILDER_NAME="${BUILDX_BUILDER:-kubeagentic-builder}"
+echo "🔧 Setting up buildx builder: $BUILDER_NAME"
+if ! docker buildx inspect $BUILDER_NAME &> /dev/null; then
+    echo "Creating new multiarch builder: $BUILDER_NAME"
+    docker buildx create --name $BUILDER_NAME --driver docker-container --use
     docker buildx inspect --bootstrap
 else
-    echo "Using existing multiarch builder..."
-    docker buildx use multiarch
+    echo "Using existing multiarch builder: $BUILDER_NAME"
+    docker buildx use $BUILDER_NAME
 fi
 
 # Configuration
 PLATFORMS="linux/amd64,linux/arm64"
-OPERATOR_IMAGE="sudeshmu/kubeagentic:operator-latest"
-AGENT_IMAGE="sudeshmu/kubeagentic:agent-latest"
+OPERATOR_IMAGE="${OPERATOR_IMG:-sudeshmu/kubeagentic:operator-latest}"
+AGENT_IMAGE="${AGENT_IMG:-sudeshmu/kubeagentic:agent-fixed}"
 
 # Build and push operator image
 echo ""
@@ -60,11 +61,11 @@ echo ""
 echo "🔍 Verifying multi-architecture support..."
 echo ""
 echo "Operator image manifests:"
-docker buildx imagetools inspect $OPERATOR_IMAGE
+docker buildx imagetools inspect $OPERATOR_IMAGE || echo "⚠️ Could not inspect operator image"
 
 echo ""
 echo "Agent image manifests:"
-docker buildx imagetools inspect $AGENT_IMAGE
+docker buildx imagetools inspect $AGENT_IMAGE || echo "⚠️ Could not inspect agent image"
 
 echo ""
 echo "🎉 Multi-architecture build complete!"
@@ -74,9 +75,17 @@ echo "   Operator: $OPERATOR_IMAGE (supports AMD64 + ARM64)"
 echo "   Agent:    $AGENT_IMAGE (supports AMD64 + ARM64)"
 echo ""
 echo "🚀 Your images are now available on both:"
-echo "   - x86_64/AMD64 (Intel/AMD servers, VMs)"
-echo "   - ARM64 (Apple Silicon, ARM servers)"
+echo "   - x86_64/AMD64 (Intel/AMD servers, VMs, most cloud providers)"
+echo "   - ARM64 (Apple Silicon, ARM servers, AWS Graviton)"
 echo ""
-echo "Test on different architectures:"
-echo "   docker run --rm $OPERATOR_IMAGE --help"
-echo "   docker run --rm $AGENT_IMAGE python --version"
+echo "📋 Test commands:"
+echo "   # Test operator (should show help):"
+echo "   docker run --rm --platform linux/amd64 $OPERATOR_IMAGE --help"
+echo "   docker run --rm --platform linux/arm64 $OPERATOR_IMAGE --help"
+echo ""
+echo "   # Test agent (should show Python version):"
+echo "   docker run --rm --platform linux/amd64 $AGENT_IMAGE python --version"
+echo "   docker run --rm --platform linux/arm64 $AGENT_IMAGE python --version"
+echo ""
+echo "💡 To use in Kubernetes, the scheduler will automatically select"
+echo "   the appropriate architecture based on your node's CPU type."

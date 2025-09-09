@@ -1,6 +1,10 @@
 # Image URL to use all building/pushing image targets
 OPERATOR_IMG ?= sudeshmu/kubeagentic:operator-latest
-AGENT_IMG ?= sudeshmu/kubeagentic:agent-latest
+AGENT_IMG ?= sudeshmu/kubeagentic:agent-fixed
+
+# Build platforms for multi-architecture support
+PLATFORMS ?= linux/amd64,linux/arm64
+BUILDX_BUILDER ?= kubeagentic-builder
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 ifeq (,$(shell go env GOBIN))
@@ -52,16 +56,32 @@ build: fmt vet ## Build manager binary.
 run: fmt vet ## Run a controller from your host.
 	go run ./main.go
 
+##@ Docker Buildx Setup
+
+.PHONY: buildx-setup
+buildx-setup: ## Setup buildx builder for multi-architecture builds.
+	@echo "🔧 Setting up buildx builder..."
+	@if ! docker buildx inspect $(BUILDX_BUILDER) >/dev/null 2>&1; then \
+		echo "Creating new buildx builder: $(BUILDX_BUILDER)"; \
+		docker buildx create --name $(BUILDX_BUILDER) --driver docker-container --use; \
+		docker buildx inspect --bootstrap; \
+	else \
+		echo "Using existing buildx builder: $(BUILDX_BUILDER)"; \
+		docker buildx use $(BUILDX_BUILDER); \
+	fi
+
+##@ Docker Build (Legacy - Single Architecture)
+
 .PHONY: docker-build-operator
-docker-build-operator: ## Build docker image for operator.
+docker-build-operator: ## Build docker image for operator (single arch).
 	docker build -f Dockerfile.operator -t ${OPERATOR_IMG} .
 
 .PHONY: docker-build-agent
-docker-build-agent: ## Build docker image for agent.
+docker-build-agent: ## Build docker image for agent (single arch).
 	docker build -f Dockerfile.agent -t ${AGENT_IMG} .
 
 .PHONY: docker-build-all
-docker-build-all: docker-build-operator docker-build-agent ## Build all docker images.
+docker-build-all: buildx-setup docker-buildx-all ## Build all docker images (multi-arch by default).
 
 .PHONY: docker-push-operator
 docker-push-operator: ## Push operator docker image.
@@ -72,18 +92,56 @@ docker-push-agent: ## Push agent docker image.
 	docker push ${AGENT_IMG}
 
 .PHONY: docker-push-all
-docker-push-all: docker-push-operator docker-push-agent ## Push all docker images.
+docker-push-all: docker-buildx-all ## Push all docker images (multi-arch by default).
+
+##@ Docker Build (Multi-Architecture)
 
 .PHONY: docker-buildx-operator
-docker-buildx-operator: ## Build and push multi-architecture operator image.
-	docker buildx build --platform linux/amd64,linux/arm64 -f Dockerfile.operator -t ${OPERATOR_IMG} --push .
+docker-buildx-operator: buildx-setup ## Build and push multi-architecture operator image.
+	@echo "🏗️  Building operator image for platforms: $(PLATFORMS)"
+	@echo "📦 Image: $(OPERATOR_IMG)"
+	docker buildx build \
+		--platform $(PLATFORMS) \
+		-f Dockerfile.operator \
+		-t $(OPERATOR_IMG) \
+		--push .
+	@echo "✅ Operator image built and pushed successfully!"
 
 .PHONY: docker-buildx-agent
-docker-buildx-agent: ## Build and push multi-architecture agent image.
-	docker buildx build --platform linux/amd64,linux/arm64 -f Dockerfile.agent -t ${AGENT_IMG} --push .
+docker-buildx-agent: buildx-setup ## Build and push multi-architecture agent image.
+	@echo "🏗️  Building agent image for platforms: $(PLATFORMS)"
+	@echo "📦 Image: $(AGENT_IMG)"
+	docker buildx build \
+		--platform $(PLATFORMS) \
+		-f Dockerfile.agent \
+		-t $(AGENT_IMG) \
+		--push .
+	@echo "✅ Agent image built and pushed successfully!"
 
 .PHONY: docker-buildx-all
 docker-buildx-all: docker-buildx-operator docker-buildx-agent ## Build and push all multi-architecture images.
+	@echo "🎉 All multi-architecture images built and pushed!"
+
+.PHONY: docker-buildx-local-operator
+docker-buildx-local-operator: buildx-setup ## Build multi-architecture operator image locally (no push).
+	@echo "🏗️  Building operator image locally for platforms: $(PLATFORMS)"
+	docker buildx build \
+		--platform $(PLATFORMS) \
+		-f Dockerfile.operator \
+		-t $(OPERATOR_IMG) \
+		--load .
+
+.PHONY: docker-buildx-local-agent
+docker-buildx-local-agent: buildx-setup ## Build multi-architecture agent image locally (no push).
+	@echo "🏗️  Building agent image locally for platforms: $(PLATFORMS)"
+	docker buildx build \
+		--platform $(PLATFORMS) \
+		-f Dockerfile.agent \
+		-t $(AGENT_IMG) \
+		--load .
+
+.PHONY: docker-buildx-local-all
+docker-buildx-local-all: docker-buildx-local-operator docker-buildx-local-agent ## Build all multi-architecture images locally (no push).
 
 .PHONY: docker-multiarch
 docker-multiarch: ## Build and push multi-architecture images using script.
@@ -141,10 +199,16 @@ undeploy-examples: ## Remove example agents.
 ##@ Complete Deployment
 
 .PHONY: complete-deploy
-complete-deploy: docker-build-all docker-push-all deploy-all ## Build, push, and deploy everything.
+complete-deploy: docker-buildx-all deploy-all ## Build, push, and deploy everything (multi-arch).
+
+.PHONY: complete-deploy-single-arch
+complete-deploy-single-arch: docker-build-operator docker-build-agent docker-push-operator docker-push-agent deploy-all ## Build, push, and deploy everything (single arch).
 
 .PHONY: dev-deploy
-dev-deploy: docker-build-all deploy-all ## Build and deploy for development (without push).
+dev-deploy: docker-buildx-local-all deploy-all ## Build and deploy for development (multi-arch, without push).
+
+.PHONY: dev-deploy-single-arch
+dev-deploy-single-arch: docker-build-operator docker-build-agent deploy-all ## Build and deploy for development (single arch, without push).
 
 ##@ Testing
 
@@ -178,6 +242,21 @@ test-agent-openai: ## Test OpenAI agent example.
 .PHONY: test-cleanup
 test-cleanup: ## Clean up test resources.
 	./local-testing/test-local.sh clean
+
+##@ Image Management
+
+.PHONY: inspect-images
+inspect-images: ## Inspect multi-architecture image manifests.
+	@echo "🔍 Inspecting operator image manifests:"
+	@docker buildx imagetools inspect $(OPERATOR_IMG) || echo "❌ Operator image not found"
+	@echo ""
+	@echo "🔍 Inspecting agent image manifests:"
+	@docker buildx imagetools inspect $(AGENT_IMG) || echo "❌ Agent image not found"
+
+.PHONY: buildx-cleanup
+buildx-cleanup: ## Clean up buildx builder.
+	@echo "🧹 Cleaning up buildx builder: $(BUILDX_BUILDER)"
+	@docker buildx rm $(BUILDX_BUILDER) 2>/dev/null || echo "Builder $(BUILDX_BUILDER) not found"
 
 ##@ Utilities
 
