@@ -23,6 +23,10 @@ import openai
 from anthropic import Anthropic
 import google.generativeai as genai
 
+# Configure structured logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
 # Import LangGraph components (optional)
 try:
     from langgraph.graph import StateGraph, END
@@ -39,10 +43,6 @@ except ImportError as e:
     LANGGRAPH_AVAILABLE = False
     logger.warning(f"LangGraph dependencies not available: {e}")
     logger.warning("Agent will only support direct framework mode")
-
-# Configure structured logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
 
 app = FastAPI(title="KubeAgentic Agent", version="1.0.0")
 
