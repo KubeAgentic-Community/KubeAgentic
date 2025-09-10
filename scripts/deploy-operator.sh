@@ -14,7 +14,7 @@ NC='\033[0m' # No Color
 
 # Configuration
 OPERATOR_NAMESPACE="kubeagentic-system"
-OPERATOR_IMAGE="sudeshmu/kubeagentic:operator-latest"
+OPERATOR_IMAGE="kubeagentic/operator:latest"
 OPERATOR_MANIFEST="deploy/operator-enhanced.yaml"
 
 # Functions

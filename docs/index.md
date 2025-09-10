@@ -56,8 +56,8 @@ kubectl apply -f deploy/all.yaml
 **Option 3: Using Docker Hub Images Directly**
 ```bash
 # Pull optimized images
-docker pull sudeshmu/kubeagentic:operator-latest  # 108MB
-docker pull sudeshmu/kubeagentic:agent-latest     # 625MB (66% smaller!)
+docker pull kubeagentic/operator:latest  # 108MB
+docker pull kubeagentic/agent:latest     # 625MB (66% smaller!)
 
 # Then apply manifests
 kubectl apply -f deploy/all.yaml

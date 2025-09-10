@@ -21,7 +21,7 @@ spec:
       serviceAccountName: kubeagentic-operator
       containers:
       - name: operator
-        image: sudeshmu/kubeagentic:operator-latest
+        image: kubeagentic/operator:latest
         imagePullPolicy: Always
         args:
         - --leader-elect

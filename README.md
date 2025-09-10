@@ -7,7 +7,7 @@
   
   <p align="center">
     <a href="https://kubeagentic.com"><img src="https://img.shields.io/badge/Website-kubeagentic.com-blue?style=for-the-badge" alt="Website"></a>
-    <a href="https://hub.docker.com/r/sudeshmu/kubeagentic"><img src="https://img.shields.io/docker/pulls/sudeshmu/kubeagentic?style=for-the-badge" alt="Docker Pulls"></a>
+    <a href="https://hub.docker.com/u/kubeagentic"><img src="https://img.shields.io/docker/pulls/kubeagentic/operator?style=for-the-badge" alt="Docker Pulls"></a>
     <a href="https://github.com/KubeAgentic-Community/KubeAgentic/releases"><img src="https://img.shields.io/github/v/release/KubeAgentic-Community/KubeAgentic?style=for-the-badge" alt="Release"></a>
     <a href="https://github.com/KubeAgentic-Community/KubeAgentic/blob/main/LICENSE"><img src="https://img.shields.io/github/license/KubeAgentic-Community/KubeAgentic?style=for-the-badge" alt="License"></a>
     <a href="https://github.com/KubeAgentic-Community/KubeAgentic/stargazers"><img src="https://img.shields.io/github/stars/KubeAgentic-Community/KubeAgentic?style=for-the-badge" alt="Stars"></a>
@@ -67,8 +67,8 @@ kubectl apply -f deploy/all.yaml
 
 KubeAgentic provides optimized Docker images hosted on Docker Hub:
 
-- **Operator Image**: `sudeshmu/kubeagentic:operator-latest` (108MB)
-- **Agent Runtime**: `sudeshmu/kubeagentic:agent-latest` (625MB - 66% smaller than original)
+- **Operator Image**: `kubeagentic/operator:latest` (108MB)
+- **Agent Runtime**: `kubeagentic/agent:latest` (625MB - 66% smaller than original)
 
 **Image Optimization Features:**
 - Multi-stage builds for minimal size
@@ -83,8 +83,8 @@ KubeAgentic provides optimized Docker images hosted on Docker Hub:
 
 ```bash
 # Pull images directly
-docker pull sudeshmu/kubeagentic:operator-latest
-docker pull sudeshmu/kubeagentic:agent-latest
+docker pull kubeagentic/operator:latest
+docker pull kubeagentic/agent:latest
 ```
 
 ### 2. Create an API Key Secret
