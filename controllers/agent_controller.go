@@ -429,7 +429,7 @@ func (r *AgentReconciler) getAgentImage(agent *aiv1.Agent) string {
 	}
 	
 	// Third priority: Hardcoded fallback
-	return "sudeshmu/kubeagentic:agent-fixed"
+	return "kubeagentic/agent:latest"
 }
 
 // SetupWithManager sets up the controller with the Manager.

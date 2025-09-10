@@ -456,7 +456,7 @@ spec:
         - --health-probe-bind-address=:8081
         env:
         - name: AGENT_IMAGE
-          value: "sudeshmu/kubeagentic:agent-fixed"
+          value: "kubeagentic/agent:latest"
         ports:
         - containerPort: 8080
           name: metrics

@@ -29,8 +29,8 @@ fi
 
 # Configuration
 PLATFORMS="linux/amd64,linux/arm64"
-OPERATOR_IMAGE="${OPERATOR_IMG:-sudeshmu/kubeagentic:operator-latest}"
-AGENT_IMAGE="${AGENT_IMG:-sudeshmu/kubeagentic:agent-fixed}"
+OPERATOR_IMAGE="${OPERATOR_IMG:-kubeagentic/operator:latest}"
+AGENT_IMAGE="${AGENT_IMG:-kubeagentic/agent:latest}"
 
 # Build and push operator image
 echo ""

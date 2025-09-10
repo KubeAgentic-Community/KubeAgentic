@@ -1,6 +1,6 @@
 # Image URL to use all building/pushing image targets
-OPERATOR_IMG ?= sudeshmu/kubeagentic:operator-latest
-AGENT_IMG ?= sudeshmu/kubeagentic:agent-fixed
+OPERATOR_IMG ?= kubeagentic/operator:latest
+AGENT_IMG ?= kubeagentic/agent:latest
 
 # Build platforms for multi-architecture support
 PLATFORMS ?= linux/amd64,linux/arm64
