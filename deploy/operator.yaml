@@ -27,6 +27,9 @@ spec:
         - --leader-elect
         - --metrics-bind-address=:8080
         - --health-probe-bind-address=:8081
+        env:
+        - name: AGENT_IMAGE
+          value: "sudeshmu/kubeagentic:agent-fixed"
         ports:
         - containerPort: 8080
           name: metrics

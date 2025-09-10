@@ -1,0 +1,31 @@
+apiVersion: ai.example.com/v1
+kind: Agent
+metadata:
+  name: custom-image-agent
+  namespace: default
+spec:
+  provider: openai
+  model: gpt-4
+  framework: direct
+  systemPrompt: "You are a helpful assistant running with a custom container image."
+  
+  # Custom image specification - overrides operator default
+  image: "my-registry/custom-kubeagentic:agent-v1.2.0"
+  
+  # API credentials
+  apiSecretRef:
+    name: openai-secret
+    key: api-key
+  
+  # Resource configuration  
+  replicas: 2
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+  
+  # Service configuration
+  serviceType: ClusterIP

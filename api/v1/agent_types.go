@@ -11,7 +11,7 @@ import (
 type AgentSpec struct {
 	// Provider specifies the LLM provider to use for the agent.
 	// This is a mandatory field and must be one of the supported providers.
-	// +kubebuilder:validation:Enum=openai;gemini;claude;vllm
+	// +kubebuilder:validation:Enum=openai;gemini;claude;vllm;ollama
 	Provider string `json:"provider"`
 
 	// Model specifies the specific model to use from the selected provider.
@@ -47,6 +47,11 @@ type AgentSpec struct {
 	// Each tool has a name, description, and an optional input schema.
 	// +optional
 	Tools []Tool `json:"tools,omitempty"`
+
+	// Image specifies the container image to use for the agent.
+	// If not specified, defaults to the operator's configured agent image.
+	// +optional
+	Image string `json:"image,omitempty"`
 
 	// Replicas is the number of agent pod replicas to run.
 	// Defaults to 1 if not specified.

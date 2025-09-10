@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 	"time"
 
 	appsv1 "k8s.io/api/apps/v1"
@@ -257,7 +258,7 @@ func (r *AgentReconciler) buildDeployment(agent *aiv1.Agent) *appsv1.Deployment 
 					Containers: []corev1.Container{
 						{
 							Name:  "agent",
-							Image: "sudeshmu/kubeagentic:agent-fixed", // This should be configurable in a real-world scenario.
+							Image: r.getAgentImage(agent),
 							Ports: []corev1.ContainerPort{
 								{ContainerPort: 8080, Protocol: corev1.ProtocolTCP},
 							},
@@ -411,6 +412,24 @@ func (r *AgentReconciler) updateCondition(conditions []aiv1.AgentCondition, newC
 		}
 	}
 	return append(conditions, newCondition)
+}
+
+// getAgentImage returns the container image to use for the agent.
+// It first checks if the agent spec has an image specified, then falls back
+// to the AGENT_IMAGE environment variable, and finally to a default.
+func (r *AgentReconciler) getAgentImage(agent *aiv1.Agent) string {
+	// First priority: Agent-specific image in spec
+	if agent.Spec.Image != "" {
+		return agent.Spec.Image
+	}
+	
+	// Second priority: Environment variable (operator-wide default)
+	if envImage := os.Getenv("AGENT_IMAGE"); envImage != "" {
+		return envImage
+	}
+	
+	// Third priority: Hardcoded fallback
+	return "sudeshmu/kubeagentic:agent-fixed"
 }
 
 // SetupWithManager sets up the controller with the Manager.

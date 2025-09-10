@@ -27,9 +27,10 @@ spec:
                 type: string
                 enum:
                 - "openai"
-                - "gemini"
+                - "gemini" 
                 - "claude"
                 - "vllm"
+                - "ollama"
                 description: "LLM provider to use for this agent"
               model:
                 type: string
@@ -159,6 +160,10 @@ spec:
                       description: "JSON schema describing the tool's input parameters"
                       x-kubernetes-preserve-unknown-fields: true
                 description: "Array of tools available to the agent"
+              image:
+                type: string
+                description: "Container image to use for the agent. If not specified, uses operator default"
+                pattern: '^[a-zA-Z0-9]([a-zA-Z0-9\-\.\/]*[a-zA-Z0-9])?(:[a-zA-Z0-9]([a-zA-Z0-9\-\.]*[a-zA-Z0-9])?)?(@sha256:[a-fA-F0-9]{64})?$'
               replicas:
                 type: integer
                 minimum: 1

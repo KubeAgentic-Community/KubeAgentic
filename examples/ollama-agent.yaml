@@ -1,0 +1,42 @@
+apiVersion: ai.example.com/v1
+kind: Agent
+metadata:
+  name: ollama-agent
+  namespace: default
+spec:
+  provider: ollama
+  model: llama3.1:8b
+  framework: direct
+  systemPrompt: "You are a helpful AI assistant powered by Ollama running locally."
+  
+  # Ollama endpoint (self-hosted)
+  endpoint: "http://ollama-service:11434"
+  
+  # For Ollama, you may not need a secret or use a dummy one
+  apiSecretRef:
+    name: ollama-secret  # Can be empty or contain optional auth
+    key: api-key
+  
+  # Resource configuration for local inference
+  replicas: 1
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
+    limits:
+      cpu: "2"
+      memory: "4Gi"
+  
+  # Service configuration
+  serviceType: ClusterIP
+---
+# Example secret for Ollama (may be empty)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ollama-secret
+  namespace: default
+type: Opaque
+data:
+  # Ollama typically doesn't require authentication, but secret is required by CRD
+  api-key: ""  # empty value
